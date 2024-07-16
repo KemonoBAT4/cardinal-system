@@ -6,11 +6,12 @@ from Logging.cardinalLogger import cardinalLogger
 class threadManager():
 
     def __init__():
-        cardinalLogger.info("Starting thread class")
+        cardinalLogger.info("Thread Manager initialized")
     
 
     def newThread():
-    
+        pass
+
     def startThread(thread):
         
         thread.start()
