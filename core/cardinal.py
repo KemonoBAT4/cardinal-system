@@ -12,23 +12,11 @@ class Cardinal:
     def cardinalShutdown(self, test):
         pass
 
-
-
-    # SYSTEM LOGIC
-    def systemLogin(self, test):
+    def cardinalLogin(self, test):
         pass
-
-    def systemCall(self, test):
-        pass
-
-    def systemLogout(self, test):
+    
+    def cardinalLogout(self, test):
         pass
 
     def cardianlReboot(self, test):
         pass
-
-    def systemSuspendUser(self, test):
-        pass
-
-    
-
