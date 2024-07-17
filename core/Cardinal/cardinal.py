@@ -1,5 +1,9 @@
 
 
+import uuid
+
+from .Threads.threadManager import threadManager
+
 class Cardinal:
 
     # CARDINAL LOGIC
@@ -7,7 +11,11 @@ class Cardinal:
         pass
 
     def cardinalStart(self, test):
-        pass
+
+        apis_thread = threadManager.newThread(generateUid(), "Cardinal Flask Api", ) # FIXME: here goes the api script for the thread, search if its possible
+
+
+        # pass
 
     def cardinalShutdown(self, test):
         pass
@@ -20,3 +28,16 @@ class Cardinal:
 
     def cardianlReboot(self, test):
         pass
+
+
+
+
+    #############
+    # UTILITIES #
+    #############
+
+    # returns a unique id, no parameters required
+    def generateUid():
+        return str(uuid.uuid4())
+
+    
