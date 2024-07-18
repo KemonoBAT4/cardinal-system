@@ -3,5 +3,7 @@
 cardinalLog.txt
 
 # KeyLogger
-
 keyLoggerLog.txt
+
+# Virtual Environment
+.venv
