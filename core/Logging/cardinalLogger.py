@@ -5,7 +5,7 @@ from datetime import datetime
 
 # Log Class, Should be called only by Cardinal itself
 class CardinalLogger():
-    
+
     logger = logging.getLogger(__name__)
     logging.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
 
