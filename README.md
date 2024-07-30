@@ -11,16 +11,13 @@ When starting the programm, cardinal will start some threads for each of theese 
  - Ai Model tester
  - other (to be implemented)
 
-After that Cardinal will listen if the api has recieved or sent some data and gather 
-them inside the model to train the ai. The api will be structured to generate and
-send code snippets that aim to help a user to interface the world of coding.
-before training the model with the generated code, the code will be passed to another ai
-already trained that will scan the code to find errors. If the errors are found about the code
-or if the user says that the code snippet is coded wrongly, the ai will retrain itself to fix errors
-and improve their database. Of course the user can send code snippets to the api ensuring first that 
-code is correct, and then providing a specific description of what the code does.
-After that the ai will check once more if the code is correct and report some errors to the user if needed.
-The user can still force the code to be passed as true to the ai model to train
+After that, Cardinal will listen for any data received or sent by the API and gather this data to train the AI model. 
+The API will be structured to generate and send code snippets that aim to help users interface with the world of coding. 
+Before training the model with the generated code, the code will be passed to another already-trained AI that will scan for errors. 
+If errors are found in the code, or if the user reports that the code snippet is incorrect, the AI will retrain itself 
+to fix errors and improve its database. Of course, users can send code snippets to the API, ensuring first that the code is correct, 
+and then providing a specific description of what the code does. After that, the AI will check once more if the code is correct and report
+any errors to the user if needed. The user can still force the code to be accepted as correct by the AI model for training purposes.
 
 ## TODO List: 
  - Cardinal base functions ( ! ) 1
