@@ -16,7 +16,7 @@ class Cardinal:
 
     def cardinalStart(self, test):
 
-        # creating the api thread
+        # creating the api thread ( TODO: better to call a subprocess )
         apis_thread = threadManager.newThread(self.generateUid(), "Cardinal Flask Api", ) # FIXME: here goes the api script for the thread, search if its possible
 
         threadManager.startThread(apis_thread)
