@@ -2,7 +2,7 @@
 
 import uuid
 
-from .Threads.threadManager import threadManager
+from Threads.threadManager import threadManager
 
 class Cardinal:
 
@@ -16,7 +16,11 @@ class Cardinal:
 
     def cardinalStart(self, test):
 
-        apis_thread = threadManager.newThread(generateUid(), "Cardinal Flask Api", ) # FIXME: here goes the api script for the thread, search if its possible
+        # creating the api thread
+        apis_thread = threadManager.newThread(self.generateUid(), "Cardinal Flask Api", ) # FIXME: here goes the api script for the thread, search if its possible
+
+        threadManager.startThread(apis_thread)
+
 
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
