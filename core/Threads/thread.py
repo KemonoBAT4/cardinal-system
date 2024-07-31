@@ -21,6 +21,13 @@ class CardinalThread():
 
         if function == 0:
             thread = threading.Thread(target=self._run_script, args=args)
+        elif function == 1:
+            pass
+        elif function == 2:
+            pass
+        else:
+            # return erros
+            pass
 
     def start(self):
         self.thread_status = "running"

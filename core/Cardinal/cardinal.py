@@ -10,35 +10,42 @@ class Cardinal:
     # INIT
     def __init__(self):
         self.cardinalStart()
+    #enddef
 
     # CARDINAL LOGIC
     def cardinalRun(self, test):
         pass
+    #enddef
 
-    def cardinalStart(self, test):
+    def _cardinalStart(self):
 
-        # creating the api thread                                                                                                 TH COR
-        apis_thread = threadManager.newThread(id = self.generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        # creating the socket
         
-        threadManager.startThread(apis_thread)
+        # creating the socket thread TODO: fix this thread
+        # cst = Cardinal Socket Thread
+        cst = threadManager.newThread(id = self.generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
+        threadManager.startThread(cst)
+
+        # creating the api thread TODO: fix this thread
+        # cat = Cardinal Apis Thread                                                                                            TH COR
+        cat = threadManager.newThread(id = self.generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        threadManager.startThread(cat)
 
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
+        threadManager.joinThread(cst) # close the socket thread
+        threadManager.joinThread(cat) # close the api thread
 
-        # pass
 
-    def cardinalShutdown(self, test):
+    #enddef
+
+    def _cardinalShutdown(self, test):
         pass
+    #enddef
 
-    def cardinalLogin(self, test):
+    def cardianlReboot(self):
         pass
-    
-    def cardinalLogout(self, test):
-        pass
-
-    def cardianlReboot(self, test):
-        pass
-
+    #enddef
 
 
 
@@ -49,5 +56,6 @@ class Cardinal:
     # returns a unique id, no parameters required
     def generateUid():
         return str(uuid.uuid4())
-
+    #enddef
+#endclass
     

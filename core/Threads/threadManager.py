@@ -8,10 +8,11 @@ class threadManager():
 
     def __init__():
         cardinalLogger.info("Thread Manager initialized")
-    
+    #enddef
 
     def newThread(id, description, function):
         return CardinalThread(id, description, function) # FIXME: probably wrong
+    #enddef
 
     def startThread(thread):
         
@@ -23,8 +24,14 @@ class threadManager():
             if(thread.thread_status == "running"):
                 return True
             else:
-                cardinalLogger.warning("Could not start Thread: " + thread_id)
+                cardinalLogger.warning("Could not start Thread: " + thread.thread_id)
+                return False
+            #endif
+        #endif
+    #enddef
 
 
     def joinThread(thread):
         thread.join()
+    #enddef
+#endclass
