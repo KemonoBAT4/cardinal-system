@@ -1,17 +1,26 @@
 
 import threading
+import subprocess
+
 import time
 
 class CardinalThread():
+
+    def _run_script(script_name):        
+        subprocess.run(["python", script_name]) 
+
     thread_id = 0
     thread_description = ""
     thread = threading.Thread()
     thread_status = "not running"
 
-    def __init__(self, id, description, function):
+    def __init__(self, id, description, function, args):
+        
         self.thread_id = id
         self.thread_description = description
-        thread = threading.Thread(target=function, args=(1,))
+
+        if function == 0:
+            thread = threading.Thread(target=self._run_script, args=args)
 
     def start(self):
         self.thread_status = "running"
