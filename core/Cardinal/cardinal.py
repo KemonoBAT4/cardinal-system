@@ -1,6 +1,7 @@
 
 
 import uuid
+import socket
 
 from Threads.threadManager import threadManager
 
@@ -16,11 +17,10 @@ class Cardinal:
 
     def cardinalStart(self, test):
 
-        # creating the api thread ( TODO: better to call a subprocess )
-        apis_thread = threadManager.newThread(self.generateUid(), "Cardinal Flask Api", ) # FIXME: here goes the api script for the thread, search if its possible
-
+        # creating the api thread                                                                                                 TH COR
+        apis_thread = threadManager.newThread(id = self.generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        
         threadManager.startThread(apis_thread)
-
 
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
