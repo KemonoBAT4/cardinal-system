@@ -1,8 +1,8 @@
 
 # Cardinal Base Configuration
 
-- [ ] Flask Apis
-  - [ ] Flask test route
+- [x] Flask Apis
+  - [x] Flask test route
 
 - [ ] Cardinal primary script
   - [ ] Cardinal can create Threads
