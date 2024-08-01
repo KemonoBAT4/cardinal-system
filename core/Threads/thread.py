@@ -9,31 +9,50 @@ class CardinalThread():
     def _run_script(script_name):        
         subprocess.run(["python", script_name]) 
 
-    thread_id = 0
-    thread_description = ""
-    thread = threading.Thread()
-    thread_status = "not running"
+    _thread_id = 0
+    _thread_description = ""
+    _thread = threading.Thread()
+    _thread_status = "not running"
 
     def __init__(self, id, description, function, args):
         
         self.thread_id = id
         self.thread_description = description
 
+        # TODO: check if the following lines are working
         if function == 0:
-            thread = threading.Thread(target=self._run_script, args=args)
+            # run the script passed as argument
+            self._thread = threading.Thread(target=self._run_script, args=args)
+            return self._thread
+        
         elif function == 1:
-            pass
-        elif function == 2:
+            # run the function 
+            # return threading.Thread(target=function, args=)
             pass
         else:
-            # return erros
             pass
+    #enddef
 
     def start(self):
         self.thread_status = "running"
         return  self.thread.start()
+    #enddef
 
     def join(self):
         self.thread_status = "not running"
         return self.thread.join()
+    #enddef
+
+    def get_thread_data(self):
+        return {
+            "thread_id": self._thread_id,
+            "thread_description": self._thread_description,
+            "thread_status": self._thread_status
+        }
+    #enddef
+    
+    def get_thread(self):
+        return self._thread
+    #enddef
+
 
