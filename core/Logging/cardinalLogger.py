@@ -5,12 +5,11 @@ from datetime import datetime
 
 # Log Class, Should be called only by Cardinal itself
 class CardinalLogger():
+    logger = logging.getLogger(__name__)
 
     def __init__(self):
-        pass
-
-    logger = logging.getLogger(__name__)
-    logging.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
+        
+        logging.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
 
     def debug(self, message):
         self.logger.debug(datetime.now() + ": " + message)

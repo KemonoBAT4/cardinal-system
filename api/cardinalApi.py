@@ -11,5 +11,9 @@ def hello_world():
 def send():
     return 'snippet sent'
 
+@app.route('/get', methods=['GET'])
+def get():
+    return 'hello there'
+
 # run the application
 app.run(host='0.0.0.0', debug=True)
