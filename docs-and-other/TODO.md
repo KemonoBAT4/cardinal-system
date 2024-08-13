@@ -4,10 +4,12 @@
 - [x] Flask Apis
   - [x] Flask test route
 
-- [ ] Cardinal primary script
+- [ ] Cardinal primary scripts
   - [ ] Cardinal can create Threads
+  - [ ] Threads can be other Cardinal that refers to a master1
   - [ ] Cardinal authentication for admins
   - [ ] Cardinal can send mails
+  - [ ] Cardinal can control a discord / telegram bot
   - [ ] Cardinal can access apis
   - [ ] Cardinal logs what happens
 
