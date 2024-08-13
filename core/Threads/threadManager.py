@@ -4,7 +4,7 @@ import time
 from Logging.cardinalLogger import cardinalLogger
 from thread import CardinalThread
 
-class threadManager():
+class ThreadManager():
 
     def __init__():
         cardinalLogger.debug("Thread Manager initialized")
