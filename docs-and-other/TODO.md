@@ -5,8 +5,8 @@
   - [x] Flask test route
 
 - [ ] Cardinal primary scripts
-  - [ ] Cardinal can create Threads
-  - [ ] Threads can be other Cardinal that refers to a master1
+  - [ ] Cardinal can create Threads / sockets
+  - [ ] Threads can be other Cardinal that refers to a master
   - [ ] Cardinal authentication for admins
   - [ ] Cardinal can send mails
   - [ ] Cardinal can control a discord / telegram bot
