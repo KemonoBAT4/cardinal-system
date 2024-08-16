@@ -1,18 +1,20 @@
 import threading
 import time
 
-from Logging.cardinalLogger import cardinalLogger
-from thread import CardinalThread
+from ..Logging.cardinalLogger import CardinalLogger
+from .thread import CardinalThread
 
 class ThreadManager():
 
     def __init__():
-        cardinalLogger.debug("Thread Manager initialized")
+        CardinalLogger.debug("Thread Manager initialized")
     #enddef
 
-    def newThread(id, description, function):
-        cardinalLogger.debug("created thread: " + id + " & " + description)
-        return CardinalThread(id, description, function) # FIXME: probably wrong
+    def newThread(id, description, function, args):
+        CardinalLogger.debug("created thread: " + id + " & " + description)
+        thread = CardinalThread()
+        
+        return thread.new(id, description, function, args) # FIXME: probably wrong
     #enddef
 
     def startThread(self, thread, timout = 10):
@@ -25,14 +27,14 @@ class ThreadManager():
             if(thread.thread_status == "running"):
                 return True
             else:
-                cardinalLogger.warning("Could not start Thread: " + thread.get_thread_data().thread_id)
-                cardinalLogger.warning("Retrying in a couple of seconds")
+                CardinalLogger.warning("Could not start Thread: " + thread.get_thread_data().thread_id)
+                CardinalLogger.warning("Retrying in a couple of seconds")
                 if timout > 0:
                     timout = timout - 1
                     time.sleep(2)
                     return self.startThread(thread, timout)
                 else:
-                    cardinalLogger.error("Thread " +  thread.get_thread_data().thread_id + "exceeded") 
+                    CardinalLogger.error("Thread " +  thread.get_thread_data().thread_id + "exceeded") 
                     return False
             #endif
         #endif
