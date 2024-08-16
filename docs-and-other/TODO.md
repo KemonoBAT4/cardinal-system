@@ -33,6 +33,12 @@
   - [ ] User input for train A.I. using Cardinal Flask Api
 
 - [ ] Chat with Cardinal or Users
+  - [ ] Auth
   - [ ] Single user chat
   - [ ] Multi user chat
   - [ ] Community of people
+
+- [ ] Other Utilities
+  - [ ] Web Scraper
+  - [ ] Game Server
+  - [ ] Maps

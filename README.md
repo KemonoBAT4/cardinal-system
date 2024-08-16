@@ -4,7 +4,7 @@ A program that can upgrade itself, maintain and fix in case of errors, with ai h
 
 ## How does it work
 
-When starting the programm, cardinal will start some threads for each of theese scripts:
+### When starting the programm, cardinal will start some threads for each of theese scripts:
  - Logger
  - Flask Api
  - Ai Model trainer
@@ -19,27 +19,20 @@ to fix errors and improve its database. Of course, users can send code snippets 
 and then providing a specific description of what the code does. After that, the AI will check once more if the code is correct and report
 any errors to the user if needed. The user can still force the code to be accepted as correct by the AI model for training purposes.
 
-## TODO List: 
- - Cardinal base functions ( ! ) 1
- - Flask Api ( ! ) 1
- - Logger ( ! ) 3
- - AI Model to train ( ! ) 1
- - AI Model to test ( ! ) 1
- - Web Scraper ( ! ) 5
- - Game Server ( ? ) 10
- - Auth ( ! ) 3
- - Chat with Humans / Cardinal ( ! ) 4
- - Maps ( ? ) 10
-
-#### Legenda:
- 1. **?** : not sure;
- 2. **!** : must do;
- 3. **X** : completed;
- 4. **< number >** : priority from 1 (max) to 10 (min)
-
 ### Cardinal Base Functions
 For now cardinal will only start a thread for the api to check basic functionality of the flask env.
 Then will be implemented the Logger inside cardinal.
 
-## Utilities
+## Getting Started
+### How to run Cardinal
+
+ - install all the requirements with ```pip install -r requirements.txt```
+ - run the program with ```python run.py```
+
+### Contribute the project
+ 
+If you have access to this repository you are free to fork the dev branch.
+When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing all the changes you made
+
+### Utilities
  - ai model training test: https://www.w3schools.com/python/python_ml_train_test.asp
