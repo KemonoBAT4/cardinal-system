@@ -7,3 +7,11 @@ keyLoggerLog.txt
 
 # Virtual Environment
 .venv
+
+# Python
+___pycache__
+cardinal.cpython-310.pyc
+cardinalLogger.cpython-310.pyc
+thread.cpython-310.pyc
+threadManager.cpython-310.pyc
+
