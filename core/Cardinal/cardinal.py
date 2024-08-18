@@ -3,8 +3,8 @@
 import uuid
 import socket
 
-from Threads.threadManager import ThreadManager
-from Logging.cardinalLogger import CardinalLogger
+from ..Threads.threadManager import ThreadManager
+from ..Logging.cardinalLogger import CardinalLogger
 
 class Cardinal:
     
@@ -38,12 +38,13 @@ class Cardinal:
             # if this cardinal is the master or not related
             self._cardinal_uid = self._generateUid()
 
-        self.cardinalStart()
+        self._cardinalStart()
     #enddef
 
     # CARDINAL LOGIC
-    def cardinalRun(self, function):
+    def cardinalRun(self, process_id, status = 'stop'):
         pass
+
     #enddef
 
     def _cardinalStart(self):
@@ -51,13 +52,13 @@ class Cardinal:
         # creating the socket
         
         # creating the socket thread TODO: fix this thread
-        # cst = Cardinal Socket Thread
-        cst = ThreadManager.newThread(id = self.generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
+        # cst = Cardinal Socket Thread FIXME: https://realpython.com/python-sockets/
+        cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
         ThreadManager.startThread(cst)
 
         # creating the api thread TODO: fix this thread
         # cat = Cardinal Apis Thread                                                                                            TH COR
-        cat = ThreadManager.newThread(id = self.generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
         ThreadManager.startThread(cat)
 
 
@@ -65,7 +66,8 @@ class Cardinal:
         ThreadManager.joinThread(cst) # close the socket thread
         ThreadManager.joinThread(cat) # close the api thread
 
-
+        self._showStartData()
+        self._startCardinalConsole()
     #enddef
 
     def cardinalShutdown(self, test):
@@ -76,14 +78,25 @@ class Cardinal:
         pass
     #enddef
 
+    def _startCardinalConsole(self):
+        pass
+
 
 
     #############
     # UTILITIES #
     #############
 
-    def _new_cardinal_children():
+    def _showStartData(self):
         
+        print("#######################")
+        print("# WELCOME TO CARDINAL #")
+        print("#######################")
+        print("")
+        print("")
+
+    def _new_cardinal_children(self):
+        pass
 
     # returns the cardinal uid, no parameters required
     def get_cardinal_uid(self):
@@ -91,7 +104,7 @@ class Cardinal:
     #enddef
 
     # returns a unique id, no parameters required
-    def _generateUid():
+    def _generateUid(self):
         return str(uuid.uuid4())
     #enddef
 #endclass

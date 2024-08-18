@@ -14,8 +14,11 @@ class CardinalThread():
     _thread = threading.Thread()
     _thread_status = "not running"
 
-    def __init__(self, id, description, function, args):
-        
+    def __init__(self):
+        pass
+    #enddef
+
+    def new(self, id, description, function, args):
         self.thread_id = id
         self.thread_description = description
 
