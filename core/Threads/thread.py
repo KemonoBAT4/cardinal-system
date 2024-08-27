@@ -1,7 +1,6 @@
 
 import threading
 import subprocess
-
 import time
 
 class CardinalThread():
@@ -9,6 +8,7 @@ class CardinalThread():
     def _run_script(script_name):        
         subprocess.run(["python", script_name]) 
 
+    _thread = None
     _thread_id = 0
     _thread_description = ""
     _thread = threading.Thread()
@@ -19,8 +19,8 @@ class CardinalThread():
     #enddef
 
     def new(self, id, description, function, args):
-        self.thread_id = id
-        self.thread_description = description
+        self._thread_id = id
+        self._thread_description = description
 
         # TODO: check if the following lines are working
         if function == 0:
@@ -31,9 +31,9 @@ class CardinalThread():
         elif function == 1:
             # run the function 
             # return threading.Thread(target=function, args=)
-            pass
+            return self._thread
         else:
-            pass
+            return self._thread
     #enddef
 
     def start(self):

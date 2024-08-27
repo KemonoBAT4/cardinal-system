@@ -7,7 +7,6 @@ def main():
     system = Cardinal()
     
 
-
 # start the program
 if __name__ == "__main__":
     main()

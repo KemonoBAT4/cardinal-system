@@ -25,14 +25,12 @@ class Cardinal:
         self.logger = CardinalLogger()
 
         if master_uid != None:
-
             # if there is a master cardinal
             self._master_uid = master_uid
             self._master_connection = master_connection
             self._cardinal_uid = children_uid
 
-            self.logger.debug("started cardinal with")
-            
+            self.logger.debug("started cardinal with")           
         else:
 
             # if this cardinal is the master or not related
@@ -44,7 +42,6 @@ class Cardinal:
     # CARDINAL LOGIC
     def cardinalRun(self, process_id, status = 'stop'):
         pass
-
     #enddef
 
     def _cardinalStart(self):
@@ -53,18 +50,21 @@ class Cardinal:
         
         # creating the socket thread TODO: fix this thread
         # cst = Cardinal Socket Thread FIXME: https://realpython.com/python-sockets/
-        cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
-        ThreadManager.startThread(cst)
+
+        # all the threads are not real threads, are class instances of CardinalThread
+
+        # FIXME: all thread gives errors
+        # cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
+        # ThreadManager.startThread(cst)
 
         # creating the api thread TODO: fix this thread
         # cat = Cardinal Apis Thread                                                                                            TH COR
-        cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
-        ThreadManager.startThread(cat)
-
+        # cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        # ThreadManager.startThread(cat)
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
-        ThreadManager.joinThread(cst) # close the socket thread
-        ThreadManager.joinThread(cat) # close the api thread
+        # ThreadManager.joinThread(cst) # close the socket thread
+        # ThreadManager.joinThread(cat) # close the api thread
 
         self._showStartData()
         self._startCardinalConsole()
@@ -80,7 +80,7 @@ class Cardinal:
 
     def _startCardinalConsole(self):
         pass
-
+    #enddef
 
 
     #############
@@ -94,9 +94,11 @@ class Cardinal:
         print("#######################")
         print("")
         print("")
+    #enddef
 
     def _new_cardinal_children(self):
         pass
+    #enddef
 
     # returns the cardinal uid, no parameters required
     def get_cardinal_uid(self):
@@ -108,4 +110,3 @@ class Cardinal:
         return str(uuid.uuid4())
     #enddef
 #endclass
-    

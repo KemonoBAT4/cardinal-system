@@ -11,10 +11,10 @@ class ThreadManager():
     #enddef
 
     def newThread(id, description, function, args):
-        CardinalLogger.debug("created thread: " + id + " & " + description)
-        thread = CardinalThread()
+        CardinalLogger.debug("creating thread: " + id + " & " + description)
+        thread_class = CardinalThread()
         
-        return thread.new(id, description, function, args) # FIXME: probably wrong
+        return thread_class.new(id, description, function, args) # FIXME: probably wrong
     #enddef
 
     def startThread(self, thread, timout = 10):
