@@ -23,6 +23,7 @@
   - [ ] Start Cardinal
   - [ ] Stop Cardinal
   - [ ] Show Logs
+  - [ ] Custom commands (ex: when loading for the first time the page to install all dep do: cardinal init / cardinal install)
 
 
 # Cardinal Optionals
