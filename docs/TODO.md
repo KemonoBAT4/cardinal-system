@@ -13,6 +13,12 @@
   - [ ] Cardinal can access apis
   - [ ] Cardinal logs what happens
 
+- [ ] Apps
+  - [ ] Discord bot
+  - [ ] Telegram bot
+  - [ ] Web app
+  - [ ] Mobile app
+
 - [ ] Users Management
   - [ ] User creation
   - [ ] User customization
