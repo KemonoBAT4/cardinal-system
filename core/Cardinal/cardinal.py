@@ -54,17 +54,17 @@ class Cardinal:
         # all the threads are not real threads, are class instances of CardinalThread
 
         # FIXME: all thread gives errors
-        # cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
-        # ThreadManager.startThread(cst)
+        cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
+        ThreadManager.startThread(cst)
 
         # creating the api thread TODO: fix this thread
         # cat = Cardinal Apis Thread                                                                                            TH COR
-        # cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
-        # ThreadManager.startThread(cat)
+        cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
+        ThreadManager.startThread(cat)
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
-        # ThreadManager.joinThread(cst) # close the socket thread
-        # ThreadManager.joinThread(cat) # close the api thread
+        ThreadManager.joinThread(cst) # close the socket thread
+        ThreadManager.joinThread(cat) # close the api thread
 
         self._showStartData()
         self._startCardinalConsole()
