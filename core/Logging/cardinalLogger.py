@@ -35,6 +35,9 @@ class CardinalLogger():
         self._print_on_console(full_message) # print the message on the console
     #enddef
 
+    def info(self, message = ""):
+        self._logger.info(datetime.now() + ": " + message)
+
     def warning(self, message = ""):
         """
         displays a warning message on the console and on the log file
