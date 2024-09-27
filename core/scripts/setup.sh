@@ -1,4 +1,6 @@
 
+# TODO: see if this script is actually needed
+
 # setup the virtual env
 python3 -m venv venv
 source venv/bin/activate
