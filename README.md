@@ -1,6 +1,4 @@
 # The Cardinal System
-A program that can upgrade itself, maintain and fix in case of errors, with ai help
-
 
 ## How does it work
 
@@ -9,7 +7,6 @@ A program that can upgrade itself, maintain and fix in case of errors, with ai h
  - Flask Api
  - Ai Model trainer
  - Ai Model tester
- - other (to be implemented)
 
 After that, Cardinal will listen for any data received or sent by the API and gather this data to train the AI model. 
 The API will be structured to generate and send code snippets that aim to help users interface with the world of coding. 
@@ -33,6 +30,3 @@ Then will be implemented the Logger inside cardinal.
  
 If you have access to this repository you are free to fork the dev branch.
 When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing all the changes you made
-
-### Utilities
- - ai model training test: https://www.w3schools.com/python/python_ml_train_test.asp
