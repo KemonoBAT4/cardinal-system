@@ -3,24 +3,70 @@ import logging
 
 from datetime import datetime
 
-# Log Class, Should be called only by Cardinal itself
+# Log Class, Should be called only by Cardinal
 class CardinalLogger():
-    logger = logging.getLogger(__name__)
+    """
+    Cardinal Logger class
+    """
+
+    _logger = None
 
     # FIXME: fix this class
     def __init__(self):
-        pass
-        # self.logger.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
 
-    def debug(self, message = ""):
-        pass
-        # self.logger.debug(datetime.now() + ": " + message)
+        self._clean_log() # cleans the log file
+
+        logging.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
+        self._logger = logging.getLogger(__name__)
+        # pass
+    #enddef
+
+    def debug(self, message = "", no_date = False):
+        """
+        displays a message on the console and on the log file
+        """
+
+        full_message = ""
+        if no_date == False:
+            full_message = (message) # only the message, should be used only by cardinal messages
+        else:
+            full_message = (datetime.now() + ": " + message) # datetime + message, should be used for all the other messages
+
+        self._print_on_console(full_message) # print the message on the console
+    #enddef
 
     def warning(self, message = ""):
+        """
+        displays a warning message on the console and on the log file
+        """
+
         pass
         # self.logger.warning(datetime.now() + ": " + message)
+    #enddef
 
     def error(self, message = ""):
+        """
+        displays a error message on the console and on the log file
+        """
         pass
         # self.logger.error(datetime.now() + ": " + message)
+    #enddef
 
+    #############
+    # UTILITIES #
+    #region #####
+
+    def _clean_log(self):
+        """
+        cleans the log file
+        """
+        # TODO: complete this function
+        pass
+    #enddef
+
+    def _print_on_console(self, message):
+        print(message)
+    #enddef
+
+    #endregion -#
+#endclass

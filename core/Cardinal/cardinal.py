@@ -54,10 +54,10 @@ class Cardinal:
     def _cardinalStart(self):
 
         self._is_running = True
-
         
-        self._showStartData()
-
+        _start_text = self._showStartData()
+        self.logger.debug(_start_text)
+        return False
         # creating the socket
         
         # creating the socket thread TODO: fix this thread
@@ -115,9 +115,9 @@ class Cardinal:
         booting now . . .
 
         # --- CARDINAL INFORMATIONS --- #
-        - current Cardinal version: {self._config('section_name', 'version')}
-        - author: {self._config('section_name', 'author')}
-        - source code: {self._config('section_name', 'source')}
+        - current Cardinal version: {self._config.get('Cardinal', 'version')}
+        - author: {self._config.get('Cardinal', 'author')}
+        - source code: {self._config.get('Cardinal', 'source')}
         
         """
         
