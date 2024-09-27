@@ -2,6 +2,7 @@
 import os
 import uuid
 import socket
+import configparser
 
 from ..Threads.threadManager import ThreadManager
 from ..Logging.cardinalLogger import CardinalLogger
@@ -11,6 +12,8 @@ class Cardinal:
     # cardinal personal info
     _cardinal_uid = "" # cardinal's unique id
     _cardinal_connection = None # cardinl's connection with childrens
+    _is_running = False
+    _config = None
     logger = None
 
     # cardinal master info
@@ -22,6 +25,10 @@ class Cardinal:
 
     # INIT
     def __init__(self, master_uid = None, master_connection = None, children_uid = None):
+
+        self._config = configparser.ConfigParser()
+        self._config.read("application.cfg")
+        # setting the logger
         self.logger = CardinalLogger()
 
         if master_uid != None:
@@ -45,6 +52,11 @@ class Cardinal:
     #enddef
 
     def _cardinalStart(self):
+
+        self._is_running = True
+
+        
+        self._showStartData()
 
         # creating the socket
         
@@ -71,13 +83,18 @@ class Cardinal:
     #enddef
 
     def cardinalShutdown(self, test):
+        self._is_running = False
+        self._force_join_all()
         pass
     #enddef
+
 
     def cardianlReboot(self):
-        pass
+        self._is_running = False
+        self._cardinalStart()
     #enddef
 
+    # 
     def _startCardinalConsole(self):
         pass
     #enddef
@@ -88,12 +105,22 @@ class Cardinal:
     #############
 
     def _showStartData(self):
+        # FIXME: fix this, implement the config reader, and finish the page inizializer
+        return f"""
+
+        #######################
+        # WELCOME TO CARDINAL #
+        #######################
+
+        booting now . . .
+
+        # --- CARDINAL INFORMATIONS --- #
+        - current Cardinal version: {self._config('section_name', 'version')}
+        - author: {self._config('section_name', 'author')}
+        - source code: {self._config('section_name', 'source')}
         
-        print("#######################")
-        print("# WELCOME TO CARDINAL #")
-        print("#######################")
-        print("")
-        print("")
+        """
+        
     #enddef
 
     def _new_cardinal_children(self):
@@ -109,4 +136,7 @@ class Cardinal:
     def _generateUid(self):
         return str(uuid.uuid4())
     #enddef
+
+    def _force_join_all():
+        pass
 #endclass
