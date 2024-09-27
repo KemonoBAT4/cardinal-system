@@ -3,6 +3,8 @@ class Children:
     _uid = None
     _children = []
 
+    # TODO: implement this class model
+
     # INIT
     def __init__(self, uid, children = []):
         self.uid = uid

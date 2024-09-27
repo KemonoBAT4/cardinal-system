@@ -4,6 +4,9 @@ import time
 from ..Logging.cardinalLogger import CardinalLogger
 from .thread import CardinalThread
 
+# TODO: fix this class
+
+
 class ThreadManager():
 
     def __init__():

@@ -5,6 +5,8 @@ import json
 
 from Logging.cardinalLogger import CardinalLogger
 
+# TODO: finish creating this class
+
 class CardinalSocket:
     
     logger = CardinalLogger()
