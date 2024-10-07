@@ -14,11 +14,21 @@ class Cardinal:
     _cardinal_connection = None # cardinl's connection with childrens
     _is_running = False
     _config = None
-    logger = None
+
+    _logger = None
 
     # cardinal master info
     _master_uid = None # string | none, cardinal master's uid
     _master_connection = None # socket | none, cardinal master connection
+
+    # threads & thread manager
+
+    _thread_manager = None
+
+    _threads = []
+    _active_threads = []
+    _closed_threads = []
+
 
     # cardinal children info
     _childrens = []
@@ -28,8 +38,10 @@ class Cardinal:
 
         self._config = configparser.ConfigParser()
         self._config.read("application.cfg")
+
         # setting the logger
         self.logger = CardinalLogger()
+        self._thread_manager = ThreadManager(self.logger)
 
         if master_uid != None:
             # if there is a master cardinal
@@ -57,7 +69,6 @@ class Cardinal:
         
         _start_text = self._showStartData()
         self.logger.debug(_start_text)
-        return False
         # creating the socket
         
         # creating the socket thread TODO: fix this thread
@@ -66,9 +77,11 @@ class Cardinal:
         # all the threads are not real threads, are class instances of CardinalThread
 
         # FIXME: all thread gives errors
-        cst = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))        
-        ThreadManager.startThread(cst)
+        cst = self._thread_manager.newThread(id = self._generateUid(), description = "Cardinal Socket", function = 0, args=("./../../core/Cardinal/cardinalSocket.py",))
+        
+        self._thread_manager.startThread(cst)
 
+        return True
         # creating the api thread TODO: fix this thread
         # cat = Cardinal Apis Thread                                                                                            TH COR
         cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))

@@ -25,19 +25,19 @@ class CardinalThread():
         if function == 0:
             # run the script passed as argument
             self._thread = threading.Thread(target=self._run_script, args=args)
-            return self._thread
+            return self
 
         elif function == 1:
             # run the function
             # return threading.Thread(target=function, args=)
-            return self._thread
+            return self
         else:
-            return self._thread
+            return self
     #enddef
 
     def start(self):
         self.thread_status = "running"
-        return  self.thread.start()
+        return  self._thread.start()
     #enddef
 
     def join(self):
@@ -53,6 +53,9 @@ class CardinalThread():
         }
     #enddef
 
+    def get_thread_status(self):
+        return self._thread_status
+
     def get_thread(self):
         return self._thread
     #enddef
@@ -61,6 +64,6 @@ class CardinalThread():
     # UTILITIES #
     #############
 
-    def _run_script(script_name):
+    def _run_script(self, script_name):
         subprocess.run(["python", script_name])
     #enddef
