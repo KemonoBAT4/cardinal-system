@@ -14,7 +14,6 @@ class Cardinal:
     _cardinal_connection = None # cardinl's connection with childrens
     _is_running = False
     _config = None
-
     _logger = None
 
     # cardinal master info
@@ -72,6 +71,12 @@ class Cardinal:
 
         _start_text = self._showStartData()
         self.logger.debug(_start_text)
+
+        # start cardinal listener thread
+        self._start_cardinal_listener_thread()
+
+        
+        
         # creating the socket
 
         # creating the socket thread TODO: fix this thread
@@ -98,10 +103,10 @@ class Cardinal:
         self._startCardinalConsole()
     #enddef
 
-    def cardinalShutdown(self, test):
-        self._is_running = False
+    def shutdown(self, test):
         self._force_join_all()
-        pass
+        
+        self._is_running = False
     #enddef
 
 
@@ -114,12 +119,20 @@ class Cardinal:
     # TODO: finish this function
     def _startCardinalConsole(self):
         pass
+
+    def _start_cardinal_listener_thread(self):
+        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
+        ThreadManager.startThread(clt)
     #enddef
 
 
     #############
     # UTILITIES #
     #############
+
+    def _kill_childrens():
+        for children in _childrens:
+            children.shutdown()
 
     def _showStartData(self):
         # FIXME: fix this, implement the config reader, and finish the page inizializer
@@ -146,7 +159,7 @@ class Cardinal:
 
     # returns the cardinal uid, no parameters required
     def get_cardinal_uid(self):
-        return self.cardinal_uid
+        return self._cardinal_uid
     #enddef
 
     # returns a unique id, no parameters required
@@ -154,7 +167,14 @@ class Cardinal:
         return str(uuid.uuid4())
     #enddef
 
+    # returns a boolean if the action is completed or not
     def _force_join_all():
 
-        pass
+        self._kill_childrens()
+        
+        
+        # TODO: implement this function in the ThreadManager script
+        ThreadManager.force_join_all()
+        return False
+        
 #endclass
