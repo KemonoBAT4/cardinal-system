@@ -109,17 +109,17 @@ class Cardinal:
         ThreadManager.startThread(cat)
 
         #TODO: maybe i can use sockets instead of thread (or even both) to excange data with external programs
-        ThreadManager.joinThread(cst) # close the socket thread
+        # ThreadManager.joinThread(cst) # close the socket thread
         ThreadManager.joinThread(cat) # close the api thread
 
         self._showStartData()
         self._startCardinalConsole()
     #enddef
 
-    def cardinalShutdown(self, test):
-        self._is_running = False
+    def shutdown(self, test):
         self._force_join_all()
-        pass
+        
+        self._is_running = False
     #enddef
 
     # FIXME: do an actual reboot of the system
@@ -131,6 +131,10 @@ class Cardinal:
     # TODO: finish this function
     def _startCardinalConsole(self):
         pass
+
+    def _start_cardinal_listener_thread(self):
+        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
+        ThreadManager.startThread(clt)
     #enddef
 
     def _start_applications(self):
@@ -143,6 +147,11 @@ class Cardinal:
     #############
     # UTILITIES #
     #############
+
+    def _kill_childrens(self):
+        for children in self._childrens:
+            children.shutdown()
+
 
     def _showStartData(self) -> str:
         # FIXME: fix this, implement the config reader, and finish the page inizializer
@@ -177,8 +186,14 @@ class Cardinal:
         return str(uuid.uuid4())
     #enddef
 
-    def _force_join_all():
-        pass
+    # returns a boolean if the action is completed or not
+    def _force_join_all(self):
+        self._kill_childrens()
+        
+        
+        # TODO: implement this function in the ThreadManager script
+        ThreadManager.force_join_all()
+        return False
     #enddef
 
     def getCardinalData(self) -> dict:
