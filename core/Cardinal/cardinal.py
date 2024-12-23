@@ -151,6 +151,7 @@ class Cardinal:
     def _kill_childrens(self):
         for children in self._childrens:
             children.shutdown()
+    #enddef
 
 
     def _showStartData(self) -> str:
