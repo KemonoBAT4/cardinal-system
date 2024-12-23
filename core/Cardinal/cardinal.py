@@ -11,10 +11,10 @@ class Cardinal:
     # region ---- cardinal variables ---------- #
     # cardinal personal info
     _cardinal_uid = "" # cardinal's unique id
-    _cardinal_connection = None # cardinl's connection with childrens
+    _cardinal_childrens_connection = None # cardinl's connection with childrens
+
     _is_running = False
     _config = None
-
     _logger = None
 
     # cardinal master info
@@ -22,16 +22,17 @@ class Cardinal:
     _master_connection = None # socket | none, cardinal master connection
 
     # threads & thread manager
-
     _thread_manager = None
 
     _threads = []
     _active_threads = []
     _closed_threads = []
 
-
     # cardinal children info
-    _childrens = []
+    _childrens = [] # should be a list of cardinals
+
+    # cardinal applications
+    _applications = dict()
 
     # endregion-- cardinal variables ---------- #
     # INIT
@@ -41,7 +42,7 @@ class Cardinal:
         self._config.read("application.cfg")
 
         # setting the logger
-        self.logger = CardinalLogger()  
+        self.logger = CardinalLogger()
         self._thread_manager = ThreadManager(self.logger)
 
         #region setting the master infos
@@ -61,17 +62,35 @@ class Cardinal:
         self._cardinalStart()
     #enddef
 
-    # CARDINAL LOGIC
-    def cardinalRun(self, process_id, status = 'stop'):
-        pass
-    #enddef
-
-    def _cardinalStart(self):
+    def _cardinalStart(self, host='127.0.0.1', port=23104):
 
         self._is_running = True
 
         _start_text = self._showStartData()
         self.logger.debug(_start_text)
+
+        # start applications
+        self._start_applications()
+
+
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server.bind((host, port))
+        server.listen(5)
+
+
+        
+
+
+        while self._is_running == False:
+            client_socket, address = server.accept()
+            print(f"Connection from {address} has been established.")
+
+
+
+            # client_handler = threading.Thread(target=self.handle_client_connection)
+
+        # ------------------------------------------------------------------ #
+
         # creating the socket
 
         # creating the socket thread TODO: fix this thread
@@ -84,7 +103,6 @@ class Cardinal:
 
         # self._thread_manager.startThread(cst)
 
-        return True
         # creating the api thread TODO: fix this thread
         # cat = Cardinal Apis Thread                                                                                            TH COR
         cat = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Flask Api", function = 0, args=("./../../api/cardinalApi.py",))
@@ -104,7 +122,6 @@ class Cardinal:
         pass
     #enddef
 
-
     # FIXME: do an actual reboot of the system
     def cardianlReboot(self):
         self._is_running = False
@@ -116,12 +133,18 @@ class Cardinal:
         pass
     #enddef
 
+    def _start_applications(self):
+        pass
+    #enddef
+
+    def handle_client_connection(self):
+        pass
 
     #############
     # UTILITIES #
     #############
 
-    def _showStartData(self):
+    def _showStartData(self) -> str:
         # FIXME: fix this, implement the config reader, and finish the page inizializer
         return f"""
 
@@ -146,7 +169,7 @@ class Cardinal:
 
     # returns the cardinal uid, no parameters required
     def get_cardinal_uid(self):
-        return self.cardinal_uid
+        return self._cardinal_uid
     #enddef
 
     # returns a unique id, no parameters required
@@ -155,6 +178,19 @@ class Cardinal:
     #enddef
 
     def _force_join_all():
-
         pass
+    #enddef
+
+    def getCardinalData(self) -> dict:
+        data = dict()
+
+        data['id'] = self._cardinal_uid # cardinals uid
+        data['running'] = self._is_running # if the cardinal is running
+        data['master_uid'] = self._master_uid # cardinal master's uid
+        data['master_connection'] = self._master_connection # cardinal master's connection
+        data['threads'] = self._threads # cardinal's threads
+        data['childrens'] = self._childrens # cardinal's possible subordinates
+        data['applications'] = self._applications # cardinal's applications
+
+        return data
 #endclass
