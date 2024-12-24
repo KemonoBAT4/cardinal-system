@@ -14,6 +14,8 @@ class Cardinal:
     _cardinal_childrens_connection = None # cardinl's connection with childrens
 
     _is_running = False
+    _host = None
+    _port = None
     _config = None
     _logger = None
 
@@ -36,7 +38,7 @@ class Cardinal:
 
     # endregion-- cardinal variables ---------- #
     # INIT
-    def __init__(self, master_uid = None, master_connection = None, children_uid = None):
+    def __init__(self, master_uid = None, master_connection = None, children_uid = None *args, **kwargs):
 
         self._config = configparser.ConfigParser()
         self._config.read("application.cfg")
@@ -52,6 +54,10 @@ class Cardinal:
             self._master_connection = master_connection
             self._cardinal_uid = children_uid
 
+            for key, value in kwargs.items():
+                pass # goes through the kwargs 
+            
+
             self.logger.debug("started cardinal with")
         else:
 
@@ -62,25 +68,32 @@ class Cardinal:
         self._cardinalStart()
     #enddef
 
-    def _cardinalStart(self, host='127.0.0.1', port=23104):
+    def _cardinalStart(self):
 
-        self._is_running = True
+        # starts the application
 
+        try:
+            pass
+        catch Exception as ex:
+            pass
+
+        # creates the server
+        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+
+        # retrieves the application's host and port
+        host = self._config.get('Cardinal', 'host')
+        port = self._config.get('Cardinal', 'port')
+        
+        server.bind((host, port))
+        server.listen(5)
+        
         _start_text = self._showStartData()
         self.logger.debug(_start_text)
 
-        # start applications
+        self._is_running = True # switch status
+
         self._start_applications()
-
-
-        server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        server.bind((host, port))
-        server.listen(5)
-
-
         
-
-
         while self._is_running == False:
             client_socket, address = server.accept()
             print(f"Connection from {address} has been established.")
