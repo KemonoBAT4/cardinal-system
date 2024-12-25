@@ -13,7 +13,7 @@ class ThreadManager():
 
     def __init__(self, logger: CardinalLogger):
         self._logger = logger
-        self._logger.debug("Thread Manager initialized")
+        # self._logger.debug("Thread Manager initialized")
     #enddef
 
     def newThread(self, id, description, function, args):

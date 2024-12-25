@@ -14,7 +14,7 @@ class CardinalLogger():
     # FIXME: fix this class
     def __init__(self):
 
-        self._clean_log() # cleans the log file
+        self._cleanLog() # cleans the log file
 
         logging.basicConfig(filename='cardinal.log', encoding='utf-8', level=logging.DEBUG)
         self._logger = logging.getLogger(__name__)
@@ -32,7 +32,7 @@ class CardinalLogger():
         else:
             full_message = (datetime.now() + ": " + message) # datetime + message, should be used for all the other messages
 
-        self._print_on_console(full_message) # print the message on the console
+        self._printOnConsole(full_message) # print the message on the console
     #enddef
 
     def warning(self, message = ""):
@@ -56,7 +56,7 @@ class CardinalLogger():
     # UTILITIES #
     #region #####
 
-    def _clean_log(self):
+    def _cleanLog(self):
         """
         cleans the log file
         """
@@ -64,7 +64,7 @@ class CardinalLogger():
         pass
     #enddef
 
-    def _print_on_console(self, message):
+    def _printOnConsole(self, message):
         print(message)
     #enddef
 
