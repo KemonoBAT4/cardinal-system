@@ -15,6 +15,8 @@ class Cardinal:
     _is_running = False # cardinal status
     _host = None # cardinal host
     _port = None # cardinal port
+    _max_connections = None # cardinal max connections
+    _current_connection = None # cardinal current connection
     _config = None # cardinal config file
     _logger = None # cardinal logger script
 
@@ -36,7 +38,8 @@ class Cardinal:
     _applications = dict()
 
     # endregion-- cardinal variables ---------- #
-    # INIT
+
+    # init
     def __init__(self, master = None,  *args, **kwargs):
 
         self._config = configparser.ConfigParser()
@@ -57,111 +60,16 @@ class Cardinal:
         self._cardinalStart()
     #enddef
 
-    def _cardinalStart(self):
-
-        try:
-            # creates the server
-            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # retrieves the application's host and port
-            host = self._config.get('Cardinal', 'host')
-            port = self._config.get('Cardinal', 'port')
-
-                            # TODO: change into: int(port)
-            server.bind((host, port))
-            server.listen(5)
-
-
-            self._is_running = True # switch status
-
-            self.logger.debug(self._showStartData())
-            # cardinal's core handler
-            while self._is_running != False:
-                client_socket, address = server.accept()
-                print(f"Connection from {address} has been established.")
-
-        except Exception as ex:
-            pass
-
-
-        # ------------------------------------------------------------------ #
-
-        # creating the socket
-
-        # creating the socket thread TODO: fix this thread
-        # cst = Cardinal Socket Thread FIXME: https://realpython.com/python-sockets/
-
-    #enddef
-
+    # shuts down cardinal
     def shutdown(self):
-        self._force_join_all()
-
+        self._killAllChildrens()
         self._is_running = False
         return True # retuns true if action shutdown successfully
-    #enddef
-
-    # TODO: finish this function
-    def _startCardinalConsole(self):
-        pass
-
-    def _start_cardinal_listener_thread(self):
-        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
-        ThreadManager.startThread(clt)
-    #enddef
-
-    #############
-    # UTILITIES #
-    #############
-
-    def _killAllChildrens(self):
-        for children in self._childrens:
-            self._shutdownChildren(children)
-    #enddef
-
-    def _shutdownChildren(self, children):
-        return children.shutdown()
-    #enddef
-
-    def _showStartData(self) -> str:
-        # FIXME: fix this, implement the config reader, and finish the page inizializer
-        return f"""
-
-        #######################
-        # WELCOME TO CARDINAL #
-        #######################
-
-        booting now . . .
-
-        # --- CARDINAL INFORMATIONS --- #
-        - current Cardinal version: {self._config.get('Cardinal', 'version')}
-        - author: {self._config.get('Cardinal', 'author')}
-        - source code: {self._config.get('Cardinal', 'source')}
-
-        """
-
-    #enddef
-
-    def _newChildren(self):
-        new = Cardinal(master=self)
     #enddef
 
     # returns the cardinal uid, no parameters required
     def getCardinalUid(self):
         return self._uid
-    #enddef
-
-    # returns a unique id, no parameters required
-    def _generateUid(self):
-        return str(uuid.uuid4())
-    #enddef
-
-    # returns a boolean if the action is completed or not
-    def _force_join_all(self):
-        self._kill_childrens()
-        
-        
-        # TODO: implement this function in the ThreadManager script
-        ThreadManager.force_join_all()
-        return False
     #enddef
 
     def getCardinalData(self) -> dict:
@@ -181,5 +89,98 @@ class Cardinal:
     def cardianlReboot(self):
         self.shutdown()
         self._cardinalStart()
+    #enddef
+
+    def _start_cardinal_listener_thread(self):
+        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
+        ThreadManager.startThread(clt)
+    #enddef
+
+    #############
+    # UTILITIES #
+    #############
+
+    # starts the whole application
+    def _cardinalStart(self):
+        try:
+            # creates the server
+            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # retrieves the application's host and port
+            self._host = str(self._config.get('Cardinal', 'host'))
+            self._port = int(self._config.get('Cardinal', 'port'))
+            self._max_connections = int(self._config.get('Cardinal', 'max_connections'))
+
+            server.bind((self._host, self._port)) # bind the host and port
+            server.listen(self._max_connections) # set the max possible connections at the same time
+
+
+            self._is_running = True # switch status
+
+            self.logger.debug(self._showStartData())
+            # cardinal's core handler
+            while self._is_running != False:
+                client_socket, address = server.accept()
+                print(f"Connection from {address} has been established.")
+
+        except Exception as ex:
+            # TODO: implement the error logger
+            self._logger.error(ex)
+            self._logger.debug("Error while starting Cardinal, check the error log for more details")
+            pass
+    #enddef
+
+    def _killAllChildrens(self):
+        for children in self._childrens:
+            try:
+                if children.isRunning() == True:
+                    response = self._shutdownChildren(children)
+
+                    if response == True:
+                        self.logger.debug(f"Children {children.getCardinalUid()} has been shutdown")
+                    else:
+                        self._logger.debug(f"Error while shutting down children {children.getCardinalUid()}")
+                    #endif
+                else:
+                    self._logger.debug(f"Children {children.getCardinalUid()} is not running")
+                #endif
+            except Exception as ex:
+                self._logger.debug(f"Error while shutting down children {children.getCardinalUid()}")
+            #endtry
+        #endfor
+    #enddef
+
+    def _shutdownChildren(self, children):
+        return children.shutdown()
+    #enddef
+
+    def _showStartData(self) -> str:
+        return f"""
+
+        #######################
+        # WELCOME TO CARDINAL #
+        #######################
+
+        booting now . . .
+
+        # --- CARDINAL INFORMATIONS --- #
+        - current Cardinal version: {self._config.get('Cardinal', 'version')}
+        - author: {self._config.get('Cardinal', 'author')}
+        - source code: {self._config.get('Cardinal', 'source')}
+
+        """
+    #enddef
+
+    def isRunning(self):
+        return self._is_running
+    #enddef
+
+    def _newChildren(self):
+        new = Cardinal(master=self)
+        self._childrens.append(new)
+    #enddef
+
+    # returns a unique id, no parameters required
+    def _generateUid(self):
+        return str(uuid.uuid4())
     #enddef
 #endclass
