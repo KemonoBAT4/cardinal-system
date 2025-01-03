@@ -2,6 +2,11 @@
 # Cardinal
 cardinalLog.txt
 
-# KeyLogger
+# Virtual Environment
+.venv
 
-keyLoggerLog.txt
+# Python
+__pycache__
+
+# Node
+node_modules
