@@ -11,6 +11,8 @@ class CardinalThread():
     _thread = threading.Thread()
     _thread_status = "not running"
 
+    _classname = "CardinalThread"
+
     # TODO: fix this class
 
     def __init__(self):

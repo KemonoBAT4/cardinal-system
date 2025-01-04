@@ -11,7 +11,7 @@ class Cardinal:
     # region ---- cardinal variables ---------- #
 
     # cardinal personal info
-    _uid = "" # cardinal's unique id
+    _uid = None # cardinal's unique id
     _is_running = False # cardinal status
     _host = None # cardinal host
     _port = None # cardinal port
@@ -19,6 +19,8 @@ class Cardinal:
     _current_connection = None # cardinal current connection
     _config = None # cardinal config file
     _logger = None # cardinal logger script
+
+    _classname = "Cardinal"
 
     # cardinal master info
     _master = None # Cardinal | none, cardinal master's
@@ -50,13 +52,65 @@ class Cardinal:
         self._thread_manager = ThreadManager(self.logger)
 
         self._uid = self._generateUid()
+
         #region setting the master infos
         if isinstance(master, Cardinal) and master != None:
 
             self._master = master
             self.logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
         #endregion master infos
+    #enddef
 
+    def _handler(self):
+        try:
+            # creates the server
+            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            # retrieves the application's host and port
+            self._host = str(self._config.get('Cardinal', 'host'))
+            self._port = int(self._config.get('Cardinal', 'port'))
+            self._max_connections = int(self._config.get('Cardinal', 'max_connections'))
+
+            server.bind((self._host, self._port)) # bind the host and port
+            server.listen(self._max_connections) # set the max possible connections at the same time
+
+            self._is_running = True # switch status
+
+            self.logger.debug(self._showStartData())
+
+            # cardinal's core handler
+            while self._is_running != False:
+                client_socket, address = server.accept()
+                print(f"Connection from {address} has been established.")
+
+                data = client_socket.recv(1024).decode()
+
+                if data:
+                    pass
+                    self._handleData(address, data)
+                else:
+                    self._logger.debug("No data received")
+                    self._logger.debug("Closing the connection with the client")
+                    client_socket.close()
+                #endif
+
+        except Exception as ex:
+            # TODO: implement the error logger
+            self._logger.error(ex)
+            self._logger.debug("Error while starting Cardinal, check the error log for more details")
+            return False
+        #endtry
+    #enddef
+
+    def _handleData(self, address, data):
+        pass
+    #enddef
+
+    ####################
+    # PUBLIC UTILITIES #
+    #region ############
+
+    # once initialized starts cardinal
+    def start(self):
         self._cardinalStart()
     #enddef
 
@@ -72,15 +126,19 @@ class Cardinal:
         return self._uid
     #enddef
 
+    # returns the cardinal core data
     def getCardinalData(self) -> dict:
         data = dict()
+
+        # FIXME: check if the infos like master_uid and others are correct
+        # probably they are not
 
         data['id'] = self._uid # cardinals uid
         data['running'] = self._is_running # if the cardinal is running
         data['master_uid'] = self._master_uid # cardinal master's uid
         data['master_connection'] = self._master_connection # cardinal master's connection
         data['threads'] = self._threads # cardinal's threads
-        data['childrens'] = self._childrens # cardinal's possible subordinates
+        data['childrens'] = self._childrens # cardinal's possible childrens
         data['applications'] = self._applications # cardinal's applications
 
         return data
@@ -91,14 +149,15 @@ class Cardinal:
         self._cardinalStart()
     #enddef
 
-    def _start_cardinal_listener_thread(self):
-        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
-        ThreadManager.startThread(clt)
+    def isRunning(self):
+        return self._is_running
     #enddef
+    #endregion  ########
 
-    #############
-    # UTILITIES #
-    #############
+
+    #####################
+    # PRIVATE UTILITIES #
+    #####################
 
     # starts the whole application
     def _cardinalStart(self):
@@ -112,7 +171,6 @@ class Cardinal:
 
             server.bind((self._host, self._port)) # bind the host and port
             server.listen(self._max_connections) # set the max possible connections at the same time
-
 
             self._is_running = True # switch status
 
@@ -170,8 +228,9 @@ class Cardinal:
         """
     #enddef
 
-    def isRunning(self):
-        return self._is_running
+    def _start_cardinal_listener_thread(self):
+        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
+        ThreadManager.startThread(clt)
     #enddef
 
     def _newChildren(self):
