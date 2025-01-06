@@ -55,7 +55,6 @@ class Cardinal:
 
         #region setting the master infos
         if isinstance(master, Cardinal) and master != None:
-
             self._master = master
             self.logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
         #endregion master infos
