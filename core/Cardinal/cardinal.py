@@ -170,6 +170,7 @@ class Cardinal:
     #####################
 
     # starts the whole application
+    
     def _cardinalStart(self):
         try:
             # creates the server
@@ -195,6 +196,20 @@ class Cardinal:
             self._logger.error(ex)
             self._logger.debug("Error while starting Cardinal, check the error log for more details")
             pass
+    #enddef
+
+    def _consoleHandler(self):
+        
+        while self._is_running:
+            command = input("Enter command (type 'help' for a list of commands): ")
+            if command.strip().lower() == 'exit':
+                self._is_running = False
+                self._logger.debug("Shutting down the server...")
+                print("Shutting down the server...")
+            else:
+                self._logger.debug(f"Received command: {command}")
+                # Handle other commands here if needed
+        #endwhile
     #enddef
 
     def _killAllChildrens(self):
