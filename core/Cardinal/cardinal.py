@@ -7,11 +7,15 @@ import configparser
 from ..Threads.threadManager import ThreadManager
 from ..Logging.cardinalLogger import CardinalLogger
 
+from ..Handler.consoleHandler import ConsoleHandler
+
 class Cardinal:
     # region ---- cardinal variables ---------- #
 
     # cardinal personal info
     _uid = None # cardinal's unique id
+    _classname = "Cardinal"
+
     _is_running = False # cardinal status
     _host = None # cardinal host
     _port = None # cardinal port
@@ -20,7 +24,8 @@ class Cardinal:
     _config = None # cardinal config file
     _logger = None # cardinal logger script
 
-    _classname = "Cardinal"
+    # handlers configurations
+    _consoleHandler = None
 
     # cardinal master info
     _master = None # Cardinal | none, cardinal master's
@@ -48,7 +53,9 @@ class Cardinal:
         self._config.read("application.cfg")
 
         # setting the logger
-        self.logger = CardinalLogger()
+        self._logger = CardinalLogger()
+        self._consoleHandler = ConsoleHandler()
+        
         self._thread_manager = ThreadManager(self.logger)
 
         self._uid = self._generateUid()
@@ -56,7 +63,7 @@ class Cardinal:
         #region setting the master infos
         if isinstance(master, Cardinal) and master != None:
             self._master = master
-            self.logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
+            self._logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
         #endregion master infos
     #enddef
 
@@ -75,6 +82,10 @@ class Cardinal:
             self._is_running = True # switch status
 
             self.logger.debug(self._showStartData())
+
+            #FIXME: instead of this use the thread manager function
+            command_thread = threading.Thread(target=self._consoleHandler.handler)
+            command_thread.start()
 
             # cardinal's core handler
             while self._is_running != False:
