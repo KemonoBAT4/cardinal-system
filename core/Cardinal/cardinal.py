@@ -3,6 +3,9 @@ import os
 import uuid
 import socket
 import configparser
+import threading
+import time
+import subprocess
 
 from ..Threads.threadManager import ThreadManager
 from ..Logging.cardinalLogger import CardinalLogger
@@ -56,7 +59,7 @@ class Cardinal:
         self._logger = CardinalLogger()
         self._consoleHandler = ConsoleHandler()
         
-        self._thread_manager = ThreadManager(self.logger)
+        self._thread_manager = ThreadManager(self._logger)
 
         self._uid = self._generateUid()
 
@@ -81,11 +84,13 @@ class Cardinal:
 
             self._is_running = True # switch status
 
-            self.logger.debug(self._showStartData())
+            self._logger.debug(self._showStartData()) # show starting data
 
-            #FIXME: instead of this use the thread manager function
-            command_thread = threading.Thread(target=self._consoleHandler.handler)
-            command_thread.start()
+            self._logger.console("starting the console handler")
+            cli_thread = threading.Thread(target=self._consoleHandler.handler) # start the console handler
+            cli_thread.start()
+            self._logger.console("started the console handler")
+            return False
 
             # cardinal's core handler
             while self._is_running != False:
@@ -96,7 +101,7 @@ class Cardinal:
 
                 if data:
                     pass
-                    self._handleData(address, data)
+                    # self._handleData(address, data)
                 else:
                     self._logger.debug("No data received")
                     self._logger.debug("Closing the connection with the client")
@@ -185,7 +190,7 @@ class Cardinal:
 
             self._is_running = True # switch status
 
-            self.logger.debug(self._showStartData())
+            self._logger.debug(self._showStartData())
             # cardinal's core handler
             while self._is_running != False:
                 client_socket, address = server.accept()
@@ -219,7 +224,7 @@ class Cardinal:
                     response = self._shutdownChildren(children)
 
                     if response == True:
-                        self.logger.debug(f"Children {children.getCardinalUid()} has been shutdown")
+                        self._logger.debug(f"Children {children.getCardinalUid()} has been shutdown")
                     else:
                         self._logger.debug(f"Error while shutting down children {children.getCardinalUid()}")
                     #endif

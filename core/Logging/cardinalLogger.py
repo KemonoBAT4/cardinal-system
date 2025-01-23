@@ -27,10 +27,24 @@ class CardinalLogger():
         """
 
         full_message = ""
-        if no_date == False:
-            full_message = (message) # only the message, should be used only by cardinal messages
-        else:
+        if no_date:
             full_message = (datetime.now() + ": " + message) # datetime + message, should be used for all the other messages
+        else:
+            full_message = (message) # only the message, should be used only by cardinal messages
+
+        self._printOnConsole(full_message) # print the message on the console
+    #enddef
+
+    def console(self, message = "", no_date = False):
+        """
+        displays a message on the console and on the log file
+        """
+
+        full_message = ""
+        if no_date:
+            full_message = (f" - {datetime.now()} : {message}") # datetime + message, should be used for all the other messages
+        else:
+            full_message = (message) # only the message, should be used only by cardinal messages
 
         self._printOnConsole(full_message) # print the message on the console
     #enddef
