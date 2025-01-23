@@ -174,8 +174,24 @@ class Cardinal:
     # PRIVATE UTILITIES #
     #####################
 
+    def _consoleHandler(self):
+        client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        server_address = (self._host, self._port)
+        client_socket.connect(server_address)
+        while self._is_running:
+
+            command = input("Enter command (type 'help' for a list of commands): ")
+            query = command.strip().lower()
+            if query == 'shutdown' or query == 'shut':
+                self._is_running = False
+                self._logger.console("Shutting down the server...")
+                print("Shutting down the server...")
+            else:
+                self._logger.debug(f"Received command: {query}")
+                # Handle other commands here if needed
+        #endwhile
+
     # starts the whole application
-    
     def _cardinalStart(self):
         try:
             # creates the server

@@ -10,7 +10,16 @@ class ConsoleHandler:
         self._logger = logger
     #enddef
 
-    def handler(self, q):
-        pass
+    def handler(self, ):
+
+
+
+
+        query = q.strip().lower()
+
+        if query == 'shutdown' or query == 'shut':
+            return 
+
+        
     #enddef
 #endclass
