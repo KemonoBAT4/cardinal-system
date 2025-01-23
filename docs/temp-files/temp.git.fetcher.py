@@ -1,7 +1,7 @@
 import subprocess
 
 # retrieve all changes from the upstream of the applications
-def run_git_command(commnad):
+def run_git_command(command):
   result = subprocess.run(command, shell=True, capture_output=True, text=True)
   # print(result.stdout) # print result
   # print(result.stderr) # print errors

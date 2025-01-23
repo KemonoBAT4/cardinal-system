@@ -1,14 +1,19 @@
 
 class User:
 
+    # models variables
+    _databasename = ""
+    _tablename = ""
+    _classname = ""
+
     _user_id = 0
     _username = ""
     _user_email = ""
     _user_name = ""
     _user_surname = ""
 
-    # TODO: implement this class model
 
+    # TODO: implement this class model
     def __init__(self, username = "", user_email = "", name = "", surname = ""):
         
         self._username = username
