@@ -27,9 +27,6 @@ class Cardinal:
     _config = None # cardinal config file
     _logger = None # cardinal logger script
 
-    # handlers configurations
-    _consoleHandler = None
-
     # cardinal master info
     _master = None # Cardinal | none, cardinal master's
 
@@ -131,9 +128,16 @@ class Cardinal:
 
     # shuts down cardinal
     def shutdown(self):
-        self._killAllChildrens()
-        self._is_running = False
-        return True # retuns true if action shutdown successfully
+        try:
+            self._shutdownAllChildren()
+            self._is_running = False
+            return True # retuns true if action shutdown successfully
+        except Exception as ex:
+            self._logger.error(ex)
+            if self._is_running == True:
+                return False
+            else:
+                return True
     #enddef
 
     # returns the cardinal uid, no parameters required
@@ -220,7 +224,7 @@ class Cardinal:
     #enddef
 
     def _consoleHandler(self):
-        
+
         while self._is_running:
             command = input("Enter command (type 'help' for a list of commands): ")
             if command.strip().lower() == 'exit':
@@ -233,11 +237,11 @@ class Cardinal:
         #endwhile
     #enddef
 
-    def _killAllChildrens(self):
+    def _shutdownAllChildren(self):
         for children in self._childrens:
             try:
                 if children.isRunning() == True:
-                    response = self._shutdownChildren(children)
+                    response = self._shutdownChild(children)
 
                     if response == True:
                         self._logger.debug(f"Children {children.getCardinalUid()} has been shutdown")
@@ -249,12 +253,23 @@ class Cardinal:
                 #endif
             except Exception as ex:
                 self._logger.debug(f"Error while shutting down children {children.getCardinalUid()}")
+                self._logger.error(ex)
             #endtry
         #endfor
     #enddef
 
-    def _shutdownChildren(self, children):
-        return children.shutdown()
+    def _shutdownChild(self, child):
+        """
+        DESCRIPTION:
+        shuts down a cardinal child
+
+        PARAMETERS:
+         - child: the child to shutdown
+        
+        RETURNS:
+         - True if the child has been shutdown
+        """
+        return child.shutdown()
     #enddef
 
     def _showStartData(self) -> str:
