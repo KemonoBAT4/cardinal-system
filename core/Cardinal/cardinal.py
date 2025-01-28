@@ -31,7 +31,6 @@ class Cardinal:
     _master = None # Cardinal | none, cardinal master's
 
     # threads & thread manager
-    _thread_manager = None
     _threads = []
     _queued_threads = []
     _active_threads = []
@@ -51,19 +50,17 @@ class Cardinal:
 
         self._config = configparser.ConfigParser()
         self._config.read("application.cfg")
+        self._uid = self._generateUid()
 
         # setting the logger
         self._logger = CardinalLogger()
         self._consoleHandler = ConsoleHandler()
         
-        self._thread_manager = ThreadManager(self._logger)
-
-        self._uid = self._generateUid()
 
         #region setting the master infos
         if isinstance(master, Cardinal) and master != None:
             self._master = master
-            self._logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
+            self._logger.console(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
         #endregion master infos
     #enddef
 
@@ -90,6 +87,7 @@ class Cardinal:
             return False
 
             # cardinal's core handler
+            # TODO: complete this function
             while self._is_running != False:
                 client_socket, address = server.accept()
                 print(f"Connection from {address} has been established.")
@@ -127,9 +125,11 @@ class Cardinal:
     #enddef
 
     # shuts down cardinal
-    def shutdown(self):
+    def shutdown(self, rebootchildrens):
         try:
-            self._shutdownAllChildren()
+            # this is needed if you want to prevent from shutting down other cardinal's instances
+            if rebootchildrens:
+                self._shutdownAllChildren() # shuts down all the cardinal sub - instances
             self._is_running = False
             return True # retuns true if action shutdown successfully
         except Exception as ex:
@@ -140,13 +140,32 @@ class Cardinal:
                 return True
     #enddef
 
-    # returns the cardinal uid, no parameters required
     def getCardinalUid(self):
+        """
+        DESCRIPTION:
+        gives the cardinal uid
+
+        PARAMETERS:
+         - no parameters required
+        
+        RETURN:
+         - str: the cardinal uid
+        """
+
         return self._uid
     #enddef
 
-    # returns the cardinal core data
     def getCardinalData(self) -> dict:
+        """
+        DESCRIPTION:
+        gives the cardinal core date
+
+        PARAMETERS:
+         - no parameters required
+        
+        RETURN:
+         - dict: a dictionary containing all the informations needed
+        """
         data = dict()
 
         # FIXME: check if the infos like master_uid and others are correct
@@ -163,16 +182,36 @@ class Cardinal:
         return data
     #enddef
 
-    def cardianlReboot(self):
-        self.shutdown()
-        self._cardinalStart()
+    def cardianlReboot(self, rebootchildrens = True):
+        """
+        DESCRIPTION:
+        reboots cardinal and its childrens
+
+        PARAMETERS:
+         - rebootchildrens: True if the childrens have to be restarted too, False if you want to restart only cardinal
+        
+        RETURN:
+         - no return
+        """
+
+        self.shutdown(rebootchildrens)
+        self._cardinalStart() # TODO: complete by adding if the cardinal wants to prevent the reboot of the children
     #enddef
 
-    def isRunning(self):
+    def isRunning(self) -> bool:
+        """
+        DESCRIPTION:
+        checks the cardinal running status
+
+        PARAMETERS:
+         - no parameters required
+        
+        RETURN:
+         - bool: True if cardinal is still running else False 
+        """
         return self._is_running
     #enddef
-    #endregion  ########
-
+    #endregion ##########
 
     #####################
     # PRIVATE UTILITIES #
@@ -229,8 +268,8 @@ class Cardinal:
             command = input("Enter command (type 'help' for a list of commands): ")
             if command.strip().lower() == 'exit':
                 self._is_running = False
-                self._logger.debug("Shutting down the server...")
-                print("Shutting down the server...")
+                self._logger.debug("Shutting down the console handler...")
+                print("Shutting down the console handler...")
             else:
                 self._logger.debug(f"Received command: {command}")
                 # Handle other commands here if needed
@@ -266,7 +305,7 @@ class Cardinal:
         PARAMETERS:
          - child: the child to shutdown
         
-        RETURNS:
+        RETURN:
          - True if the child has been shutdown
         """
         return child.shutdown()
@@ -299,8 +338,17 @@ class Cardinal:
         self._childrens.append(new)
     #enddef
 
-    # returns a unique id, no parameters required
     def _generateUid(self):
+        """
+        DESCRIPTION:
+        generates a new unique id
+
+        PARAMETERS:
+         - no parameters required
+        
+        RETURN:
+         - str: the generated uid
+        """
         return str(uuid.uuid4())
     #enddef
 #endclass
