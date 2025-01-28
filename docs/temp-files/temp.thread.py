@@ -68,3 +68,62 @@ class CardinalThread():
     def _run_script(self, script_name):
         subprocess.run(["python", script_name])
     #enddef
+
+# --------------------------------------------------------------------------- #
+
+
+class CardinalThread2():
+
+    _thread = None
+    _id = None
+    _description = None
+    _function = None
+    _running = False
+    _args = None
+
+    _logger = None
+    _classname = "CardinalThread"
+
+    def __init__(self, id, description = "No description provided", function = None, *args, **kwargs):
+        self._thread = threading.Thread()
+        self._id = id
+        self._description = description
+        self._function = function
+        self._args = args
+        self._kwargs = kwargs
+    #enddef
+
+
+    def start(self):
+        return self._start()
+    #enddef
+
+
+    #############
+    # UTILITIES #
+    #############
+
+    def _start(self):
+        try:
+            pass
+        except Exception as e:
+            self._logger.error(e)
+
+            self._stop()
+            return False
+    #enddef
+
+    def _stop(self):
+        try:
+            self._thread.join()
+        except Exception as e:
+            self._logger.error(e)
+
+            return False
+    #enddef
+
+    def _getThread(self):
+        return self._thread
+    #enddef
+
+#endclass

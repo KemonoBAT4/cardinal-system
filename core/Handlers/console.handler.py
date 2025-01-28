@@ -18,8 +18,8 @@ class ConsoleHandler:
         query = q.strip().lower()
 
         if query == 'shutdown' or query == 'shut':
-            return 
+            return
 
-        
+
     #enddef
 #endclass
