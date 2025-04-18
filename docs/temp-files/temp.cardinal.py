@@ -23,16 +23,24 @@ class Cardinal:
     _uid = None
     _app = None
 
-    
+
 
     def __init__(self, app):
         self._app = app
     #enddef
 
+    # this function will setup cardinal meaning that:
+    # - it will setup the database (if not set)
+    # - it will load the registered applications
+    #- it will setup applications' databases (if not set)
     def setup(self):
         self._uid = self._generateUid()
     #enddef
 
+    # this function will start cardinal meaning that:
+    # - it will run all the things that got set up in the setup function
+    # - it will run the loaded applications in a separate thread / sockets
+    # - it will run a dashboard management page
     def start(self):
         pass
     #enddef
