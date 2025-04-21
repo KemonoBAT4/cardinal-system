@@ -9,7 +9,7 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
 
-from core.cardinal import Cardinal
+from core.Cardinal.cardinal import Cardinal
 
 # FIXME: fix this imports
 # from ..models import *
