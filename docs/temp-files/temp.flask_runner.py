@@ -1,6 +1,5 @@
 
-
-
+# flask imports:
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
@@ -9,6 +8,10 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_mail import Mail, Message
 from flask_bcrypt import Bcrypt
 
+# other imports:
+import configparser
+
+# cardinal imports:
 from core.Cardinal.cardinal import Cardinal
 
 # FIXME: fix this imports
@@ -21,12 +24,12 @@ app = Flask(__name__)
 cors = CORS(app)
 
 # Setup Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///site.db' #TODO: change this
 
-cardinal = Cardinal(app)
+cardinal = Cardinal(app, config=configparser.ConfigParser())
 cardinal.setup()
-cardinal.start()
 
 if __name__ == "__main__":
+    cardinal.start()
     app.run(debug=True, host='0.0.0.0')
 #endif
