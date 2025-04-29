@@ -5,7 +5,6 @@ from sqlalchemy.orm import backref, relationship
 
 from core.Utils.models import BaseModel, db
 
-
 class User(BaseModel):
 
     _classname = "User"
@@ -44,8 +43,18 @@ class Application(BaseModel):
     __tablename__ = "applications"
 
     name = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.Text, unique=True, nullable=False)
+    description = db.Column(db.Text, unique=False, nullable=False)
 
     path = db.Column(db.Text, nullable=False)
     url = db.Column(db.String(255), nullable=False)
+#endclass
+
+class Undefined(BaseModel):
+
+    _classname = "Undefined"
+    __tablename__ = "undefined"
+
+    name = db.Column(db.String(255), unique=True, nullable=False)
+    description = db.Column(db.Text, unique=False, nullable=False)
+
 #endclass
