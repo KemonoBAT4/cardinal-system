@@ -82,7 +82,7 @@ class CardinalLogger():
     #enddef
 
     def _printOnConsole(self, message):
-        print(message)
+        print(f'        {message}')
     #enddef
 
     #endregion -#

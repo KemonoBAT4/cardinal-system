@@ -9,6 +9,7 @@ import subprocess
 
 from core.Logging.cardinalLogger import CardinalLogger
 from core.Models.models import *
+from core.routes.routes import cardinal_routes
 
 
 #TODO: check if this description is correct
@@ -36,13 +37,17 @@ class Cardinal:
     _applications = []
     _threads = []
     _sockets = []
+
+    _version = None
+    _api_version = None
+
+
     #endregion - cardinal's variables ---------- #
 
     # init
     def __init__(self, app, config: configparser.ConfigParser = None, logger: CardinalLogger = None):
         self._app = app
-        self.config = config if config else configparser.ConfigParser()
-        self.config.read("application.cfg")
+        self._config = config if config else configparser.ConfigParser()
         self._logger = logger if logger else CardinalLogger()
         # self._logger.setLogger(self._config.get('Cardinal', 'logFilePath'))
     #enddef
@@ -52,8 +57,10 @@ class Cardinal:
     # - it will load the registered applications
     #- it will setup applications' databases (if not set)
     def setup(self):
-
-
+        """
+        DESCRIPTION:
+        sets all the variables
+        """
 
         self._uid = self._generateUid()
         self._registeredApplications()
@@ -77,21 +84,27 @@ class Cardinal:
         RETURN:
         - no return
         """
-        self._logger.debug(self._logger.self._showStartData())
 
-        self._setApplicationRoutes()
-        # self.
+        # self._api_version = self._config.get('Cardinal Api', 'version')
 
+        cardinal_prefix = f'/cardinal/'
+
+        if not self._running:
+            self._running = True
+
+            self._logger.debug(self._showStartData())
+            self._app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
+
+            self._setApplicationRoutes()
+        #endif
     #enddef
-
-    
 
 
     #############
     # UTILITIES #
     #region #####
 
-    def _showStartData(self):
+    def _showStartData(self) -> str:
         """
         DESCRIPTION:
         Displays the start data of the Cardinal instance.
@@ -100,7 +113,7 @@ class Cardinal:
         - no parameters required
 
         RETURN:
-        - no return
+        - str: The start data of the Cardinal instance.
         """
         return f"""
 
@@ -132,7 +145,8 @@ class Cardinal:
         """
 
         for application in self._applications:
-            self._app.register_blueprint(application.) # TODO: fix this line
+            pass
+            # self._app.register_blueprint(application.) # TODO: fix this line
             # self._app.register_blueprint(application.getBlueprint())
             # self._app.register_blueprint(application)
     #enddef
@@ -148,7 +162,8 @@ class Cardinal:
         RETURN:
         - no return
         """
-        apps = Application.query.all()
+        pass
+        # apps = Application.query.all()
     #enddef
 
     def _setupApplications(self):
