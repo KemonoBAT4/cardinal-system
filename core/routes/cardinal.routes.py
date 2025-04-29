@@ -1,2 +1,0 @@
-
-# Cardinal Routes
