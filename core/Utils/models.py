@@ -14,8 +14,8 @@ class BaseModel(db.Model):
     _methods_to_avoid = [ "to_dict", "save", "delete", "update", "patch" ]
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    created_at = db.Column(db.DateTime, nullable=False)
-    updated_at = db.Column(db.DateTime, nullable=False)
+    # created_at = db.Column(db.DateTime, nullable=False)
+    # updated_at = db.Column(db.DateTime, nullable=False)
 
     def save(self):
         """
@@ -34,12 +34,12 @@ class BaseModel(db.Model):
             "message": "Object saved successfully"
         }
         try:
-            if self.id is None:
-                self.created_at = db.func.current_timestamp()
-                self.updated_at = db.func.current_timestamp()
-            else:
-                self.updated_at = db.func.current_timestamp()
-            #endif
+            # if self.id is None:
+            #     self.created_at = db.func.current_timestamp()
+            #     self.updated_at = db.func.current_timestamp()
+            # else:
+            #     self.updated_at = db.func.current_timestamp()
+            # #endif
 
             db.session.add(self)
             db.session.commit()

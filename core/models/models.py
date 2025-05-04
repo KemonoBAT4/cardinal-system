@@ -1,6 +1,6 @@
 
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, Boolean, Text, ForeignKey
+from sqlalchemy import ForeignKey
 from sqlalchemy.orm import backref, relationship
 
 from core.Utils.models import BaseModel, db
@@ -45,8 +45,9 @@ class Application(BaseModel):
     name = db.Column(db.String(255), unique=True, nullable=False)
     description = db.Column(db.Text, unique=False, nullable=False)
 
-    path = db.Column(db.Text, nullable=False)
-    url = db.Column(db.String(255), nullable=False)
+    blueprint_name = db.Column(db.String(255), nullable=False)
+    folder_path = db.Column(db.Text, nullable=False)
+    url_prefix = db.Column(db.String(255), nullable=False)
 #endclass
 
 class Undefined(BaseModel):
@@ -56,5 +57,4 @@ class Undefined(BaseModel):
 
     name = db.Column(db.String(255), unique=True, nullable=False)
     description = db.Column(db.Text, unique=False, nullable=False)
-
 #endclass
