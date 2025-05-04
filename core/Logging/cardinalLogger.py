@@ -65,6 +65,9 @@ class CardinalLogger():
         """
         displays a error message on the console and on the log file
         """
+
+        
+
         pass
         # self.logger.error(datetime.now() + ": " + message)
     #enddef

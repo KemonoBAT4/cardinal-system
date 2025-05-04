@@ -6,10 +6,13 @@ import configparser
 import threading
 import time
 import subprocess
+import importlib
 
 from core.Logging.cardinalLogger import CardinalLogger
 from core.Models.models import *
 from core.routes.routes import cardinal_routes
+
+from flask import current_app
 
 
 #TODO: check if this description is correct
@@ -27,6 +30,7 @@ class Cardinal:
     #region ---- cardinal's variables ---------- #
     _uid = None
     _app = None
+    _app_context = None
 
     _db = None
 
@@ -34,22 +38,28 @@ class Cardinal:
     _config = None
     _logger = None
 
-    _applications = []
+    _applications = [] # a dict of all the application datas
     _threads = []
     _sockets = []
 
     _version = None
     _api_version = None
 
-
     #endregion - cardinal's variables ---------- #
 
     # init
     def __init__(self, app, config: configparser.ConfigParser = None, logger: CardinalLogger = None):
+
         self._app = app
+        self._app_context = app.app_context()
+        self._app_context.push()
+
         self._config = config if config else configparser.ConfigParser()
         self._logger = logger if logger else CardinalLogger()
-        # self._logger.setLogger(self._config.get('Cardinal', 'logFilePath'))
+    #enddef
+
+    def __del__(self):
+        self._app_context.pop()
     #enddef
 
     # this function will setup cardinal meaning that:
@@ -63,7 +73,6 @@ class Cardinal:
         """
 
         self._uid = self._generateUid()
-        self._registeredApplications()
         self._setupApplications()
     #enddef
 
@@ -72,7 +81,6 @@ class Cardinal:
     # - it will run the loaded applications in a separate thread / sockets
     # - it will run a dashboard management page
     def start(self):
-
         """
         DESCRIPTION:
         Starts the Cardinal instance by setting up the database, loading registered applications,
@@ -85,20 +93,15 @@ class Cardinal:
         - no return
         """
 
-        # self._api_version = self._config.get('Cardinal Api', 'version')
-
-        cardinal_prefix = f'/cardinal/'
+        cardinal_prefix = f'/cardinal'
 
         if not self._running:
             self._running = True
 
             self._logger.debug(self._showStartData())
-            self._app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
-
-            self._setApplicationRoutes()
+            current_app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
         #endif
     #enddef
-
 
     #############
     # UTILITIES #
@@ -115,6 +118,7 @@ class Cardinal:
         RETURN:
         - str: The start data of the Cardinal instance.
         """
+
         return f"""
 
         #######################
@@ -144,26 +148,13 @@ class Cardinal:
         - no return
         """
 
-        for application in self._applications:
-            pass
-            # self._app.register_blueprint(application.) # TODO: fix this line
-            # self._app.register_blueprint(application.getBlueprint())
-            # self._app.register_blueprint(application)
-    #enddef
-
-    def _registeredApplications(self):
-        """
-        DESCRIPTION:
-        loads the registered applications from the database.
-
-        PARAMETERS:
-        - no parameters required
-
-        RETURN:
-        - no return
-        """
         pass
-        # apps = Application.query.all()
+
+        # for dict in self._applications:
+        #     blueprint_folder = os.path.join(os.path.dirname(__file__), 'apps', dict['blueprint_name'])
+        #     routes_module = importlib.import_module(f'{dict["blueprint_name"]}.routes')
+        #     current_app.register_blueprint(getattr(routes_module, f'{dict["blueprint_name"]}_routes'), url_prefix=dict['url_prefix'])
+        # #endfor
     #enddef
 
     def _setupApplications(self):
@@ -177,7 +168,15 @@ class Cardinal:
         RETURN:
         - no return
         """
-        pass
+
+        applications = Application.query.all()
+
+        for application in applications:
+            # application.delete()
+            self._applications.append(application.to_dict())
+        #endfor
+
+        self._setApplicationRoutes()
     #enddef
 
     def _setupThreads(self):
