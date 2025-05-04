@@ -1,7 +1,7 @@
 
 
 # flask imports:
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -14,15 +14,12 @@ import configparser
 
 # cardinal imports:
 from core.Cardinal.cardinal import Cardinal
-
-# FIXME: fix this imports
-# from ..models import *
-# from ..utils import *
-# from ..rotues import *
+from core.Models.models import db
 
 # Create App
 app = Flask(__name__)
 cors = CORS(app)
+
 
 config = configparser.ConfigParser()
 config.read("application.cfg")
@@ -30,7 +27,20 @@ config.read("application.cfg")
 # Setup Database
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
 
-cardinal = Cardinal(app, config=config)
+# Init app's database
+db.init_app(app)
+
+# TODO: find a way to not comment / uncomment every time we need a database reset / migration
+# from core.Models.models import *
+# with app.app_context():
+#     db.create_all()
+
+@app.route("/", methods=['GET', 'POST'])
+def home():
+    return redirect("/home")
+#enddef
+
+cardinal = Cardinal(app=app, config=config)
 cardinal.setup()
 
 if __name__ == "__main__":
