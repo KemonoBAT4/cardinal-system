@@ -4,9 +4,6 @@ from flask import Blueprint, jsonify, request
 from flask import redirect, url_for, render_template
 
 from core.Models.models import *
-from core.Web.template import *
-
-# from core.Web.
 
 # TODO: implement login required
 
