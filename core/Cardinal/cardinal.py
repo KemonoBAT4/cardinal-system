@@ -124,6 +124,9 @@ class Cardinal:
         - str: The start data of the Cardinal instance.
         """
 
+        version_text = f'{self._config.get("Cardinal", "version_type")} {self._config.get("Cardinal", "version")}'
+
+
         return f"""
 
         #######################
@@ -133,7 +136,7 @@ class Cardinal:
         booting now . . .
 
         # --- CARDINAL INFORMATIONS --- #
-        - current Cardinal version: {self._config.get('Cardinal', 'version')}
+        - current Cardinal version: {version_text}
         - author: {self._config.get('Cardinal', 'author')}
         - source code: {self._config.get('Cardinal', 'source')}
         # ----------------------------- #
@@ -153,7 +156,15 @@ class Cardinal:
         - no return
         """
 
-        pass
+        try:
+            self._logger.debug("Setting up application routes . . .")
+
+            # TODO: complete this function
+
+            self._logger.debug("Setup complete")
+        except Exception as e:
+            self._logger.debug("There was an error during the routes setup. See the log file for the complete error.")
+            self._logger.error(f'Error: {e}')
 
         # for dict in self._applications:
         #     blueprint_folder = os.path.join(os.path.dirname(__file__), 'apps', dict['blueprint_name'])
