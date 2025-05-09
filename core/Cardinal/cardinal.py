@@ -10,7 +10,10 @@ import importlib
 
 from core.Logging.cardinalLogger import CardinalLogger
 from core.Models.models import *
-from core.routes.routes import cardinal_routes
+
+# Import Routes
+from core.routes.cardinal_routes import cardinal_routes
+from core.routes.main_routes import main_routes
 
 from flask import current_app
 
@@ -94,12 +97,14 @@ class Cardinal:
         """
 
         cardinal_prefix = f'/cardinal'
+        main_prefix = f'/'
 
         if not self._running:
             self._running = True
 
             self._logger.debug(self._showStartData())
             current_app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
+            current_app.register_blueprint(main_routes, url_prefix=main_prefix)
         #endif
     #enddef
 

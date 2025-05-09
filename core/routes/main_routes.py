@@ -39,12 +39,16 @@ def dashboard_routes():
 # GET THE FILES #
 #################
 
-@main_routes.route("/styles/<path:filename>", methods=['GET'])
-def styles(filename):
-    return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'styles'), filename)
+@main_routes.route("/styles/<string:app>/<path:filename>", methods=['GET'])
+def styles(app, filename):
+    if "cardinal" in app.lower():
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'styles'), filename)
+    #endif
 #enddef
 
-@main_routes.route("/scripts/<path:filename>", methods=['GET'])
-def scripts(filename):
-    return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'scripts'), filename)
+@main_routes.route("/scripts/<string:app>/<path:filename>", methods=['GET'])
+def scripts(app, filename):
+    if "cardinal" in app.lower():
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'scripts'), filename)
+    #enddef
 #enddef
