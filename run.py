@@ -17,7 +17,7 @@ from core.Cardinal.cardinal import Cardinal
 from core.Models.models import db
 
 # Create App
-app = Flask(__name__)
+app = Flask(__name__, template_folder="core/web/templates")
 cors = CORS(app)
 
 
@@ -35,15 +35,10 @@ db.init_app(app)
 # with app.app_context():
 #     db.create_all()
 
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    return redirect("/home")
-#enddef
-
 cardinal = Cardinal(app=app, config=config)
 cardinal.setup()
 
 if __name__ == "__main__":
     cardinal.start()
-    app.run(debug=False, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0')
 #endif
