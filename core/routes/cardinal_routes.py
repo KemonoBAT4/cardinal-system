@@ -3,11 +3,16 @@
 from flask import Blueprint, jsonify, request
 from flask import redirect, url_for, render_template
 
+import configparser
+
 from core.Models.models import *
 
 # TODO: implement login required
 
 cardinal_routes = Blueprint('Cardinal_Routes', __name__)
+
+config = configparser.ConfigParser()
+config.read("application.cfg")
 
 
 @cardinal_routes.route("/", methods=['GET'])
@@ -24,26 +29,21 @@ def dashboard_routes():
     Dashboard page
     """
 
-    # breakpoint()
+    current_version = config.get("Cardinal", "version")
+    username = "Kemono_BAT_4" # TODO: modify this
+    # username = current_user.username
+    title = "The Cardinal System"
 
-    # appa = Application(
-    #     name="test1",
-    #     description="test1 description",
-    #     blueprint_name="test1",
-    #     folder_path = "test1",
-    #     url_prefix = "test1"
-    # )
 
-    result = []
+    return render_template(
+        'dashboard.html',
+        cardinal_version=current_version,
+        logged_user=username,
+        main_title=title
+    )
 
-    [result.append(i.to_dict()) for i in Application.query.all()]
-    
-    # result = appa.save()
-
-    # return render_template("template/dashboard.html")
- 
     # TODO: implement home dashboard, with login method
-    return result
+    # return result
 #enddef
 
 
