@@ -16,5 +16,5 @@ As you can tell [here](https://github.com/KemonoBAT4/cardinal-system/blob/dev/do
 
 ### Contribute the project
  
-If you have access to this repository you are free to fork the dev branch.
-When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing all the changes you made
+If you have access to this repository you are free to fork the dev branch to help the project.
+When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/cardinal-system/pulls) providing a detailed description of all the changes you made
