@@ -3,126 +3,130 @@ import os
 import uuid
 import socket
 import configparser
+import threading
+import time
+import subprocess
+import importlib
 
-from ..Threads.threadManager import ThreadManager
-from ..Logging.cardinalLogger import CardinalLogger
+from core.Logging.cardinalLogger import CardinalLogger
+from core.Models.models import *
+
+# Import Routes
+from core.routes.cardinal_routes import cardinal_routes
+from core.routes.main_routes import main_routes
+
+from flask import current_app
+
+
+#TODO: check if this description is correct
+
+# Cardinal is a class that represents a system for managing applications and their configurations.
+# It provides methods for setting up the system, starting applications, and managing threads.
+# It also includes methods for generating unique identifiers and managing application registrations.
+# It is designed to be extensible and can be used as a base class for creating specific application systems.
+# Cardinal is a singleton class, meaning that only one instance of it can exist at a time.
+# It is initialized with an application instance and provides methods for setting up and starting the system.
+# It also includes methods for managing application registrations and generating unique identifiers.
 
 class Cardinal:
-    # region ---- cardinal variables ---------- #
 
-    # cardinal personal info
-    _uid = "" # cardinal's unique id
-    _is_running = False # cardinal status
-    _host = None # cardinal host
-    _port = None # cardinal port
-    _config = None # cardinal config file
-    _logger = None # cardinal logger script
+    #region ---- cardinal's variables ---------- #
+    _uid = None
+    _app = None
+    _app_context = None
 
-    # cardinal master info
-    _master = None # Cardinal | none, cardinal master's
+    _db = None
 
-    # threads & thread manager
-    _thread_manager = None
+    _running = False
+    _config = None
+    _logger = None
+
+    _applications = [] # a dict of all the application datas
     _threads = []
-    _queued_threads = []
-    _active_threads = []
-    _closed_threads = []
+    _sockets = []
 
-    # cardinal children info
-    _childrens = [] # should be a list of cardinals
-    _cardinal_childrens_connection = None # cardinl's connection with childrens
+    _version = None
+    _api_version = None
 
-    # cardinal applications
-    _applications = dict()
+    #endregion - cardinal's variables ---------- #
 
-    # endregion-- cardinal variables ---------- #
-    # INIT
-    def __init__(self, master = None,  *args, **kwargs):
+    # init
+    def __init__(self, app, config: configparser.ConfigParser = None, logger: CardinalLogger = None):
 
-        self._config = configparser.ConfigParser()
-        self._config.read("application.cfg")
+        self._app = app
+        self._app_context = app.app_context()
+        self._app_context.push()
 
-        # setting the logger
-        self.logger = CardinalLogger()
-        self._thread_manager = ThreadManager(self.logger)
+        self._config = config if config else configparser.ConfigParser()
+        self._logger = logger if logger else CardinalLogger()
+    #enddef
+
+    def __del__(self):
+        self._app_context.pop()
+    #enddef
+
+    # this function will setup cardinal meaning that:
+    # - it will setup the database (if not set)
+    # - it will load the registered applications
+    #- it will setup applications' databases (if not set)
+    def setup(self):
+        """
+        DESCRIPTION:
+        sets all the variables
+        """
 
         self._uid = self._generateUid()
-        #region setting the master infos
-        if isinstance(master, Cardinal) and master != None:
-
-            self._master = master
-            self.logger.debug(f"Starting Cardianl With Master {self._master.getCardinalUid()}")
-        #endregion master infos
-
-        self._cardinalStart()
+        self._setupApplications()
     #enddef
 
-    def _cardinalStart(self):
+    # this function will start cardinal meaning that:
+    # - it will run all the things that got set up in the setup function
+    # - it will run the loaded applications in a separate thread / sockets
+    # - it will run a dashboard management page
+    def start(self):
+        """
+        DESCRIPTION:
+        Starts the Cardinal instance by setting up the database, loading registered applications,
+        and starting the applications in separate threads or sockets.
 
-        try:
-            # creates the server
-            server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            # retrieves the application's host and port
-            host = self._config.get('Cardinal', 'host')
-            port = self._config.get('Cardinal', 'port')
+        PARAMETERS:
+        - no parameters required
 
-                            # TODO: change into: int(port)
-            server.bind((host, port))
-            server.listen(5)
+        RETURN:
+        - no return
+        """
 
+        cardinal_prefix = f'/cardinal'
+        main_prefix = f'/'
 
-            self._is_running = True # switch status
+        if not self._running:
+            self._running = True
 
-            self.logger.debug(self._showStartData())
-            # cardinal's core handler
-            while self._is_running != False:
-                client_socket, address = server.accept()
-                print(f"Connection from {address} has been established.")
-
-        except Exception as ex:
-            pass
-
-
-        # ------------------------------------------------------------------ #
-
-        # creating the socket
-
-        # creating the socket thread TODO: fix this thread
-        # cst = Cardinal Socket Thread FIXME: https://realpython.com/python-sockets/
-
-    #enddef
-
-    def shutdown(self):
-        self._force_join_all()
-
-        self._is_running = False
-        return True # retuns true if action shutdown successfully
-    #enddef
-
-    # TODO: finish this function
-    def _startCardinalConsole(self):
-        pass
-
-    def _start_cardinal_listener_thread(self):
-        clt = ThreadManager.newThread(id = self._generateUid(), description = "Cardinal Listener", function = 0, args="TODO: set function")
-        ThreadManager.startThread(clt)
+            self._logger.debug(self._showStartData())
+            current_app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
+            current_app.register_blueprint(main_routes, url_prefix=main_prefix)
+        #endif
     #enddef
 
     #############
     # UTILITIES #
-    #############
-
-    def _killAllChildrens(self):
-        for children in self._childrens:
-            self._shutdownChildren(children)
-    #enddef
-
-    def _shutdownChildren(self, children):
-        return children.shutdown()
-    #enddef
+    #region #####
 
     def _showStartData(self) -> str:
-        # FIXME: fix this, implement the config reader, and finish the page inizializer
+        """
+        DESCRIPTION:
+        Displays the start data of the Cardinal instance.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - str: The start data of the Cardinal instance.
+        """
+
+        version_text = f'{self._config.get("Cardinal", "version_type")} {self._config.get("Cardinal", "version")}'
+
+
         return f"""
 
         #######################
@@ -132,54 +136,82 @@ class Cardinal:
         booting now . . .
 
         # --- CARDINAL INFORMATIONS --- #
-        - current Cardinal version: {self._config.get('Cardinal', 'version')}
+        - current Cardinal version: {version_text}
         - author: {self._config.get('Cardinal', 'author')}
         - source code: {self._config.get('Cardinal', 'source')}
+        # ----------------------------- #
 
         """
-
     #enddef
 
-    def _newChildren(self):
-        new = Cardinal(master=self)
+    def _setApplicationRoutes(self):
+        """
+        DESCRIPTION:
+        Sets up the application routes.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - no return
+        """
+
+        try:
+            self._logger.debug("Setting up application routes . . .")
+
+            # TODO: complete this function
+
+            self._logger.debug("Setup complete")
+        except Exception as e:
+            self._logger.debug("There was an error during the routes setup. See the log file for the complete error.")
+            self._logger.error(f'Error: {e}')
+
+        # for dict in self._applications:
+        #     blueprint_folder = os.path.join(os.path.dirname(__file__), 'apps', dict['blueprint_name'])
+        #     routes_module = importlib.import_module(f'{dict["blueprint_name"]}.routes')
+        #     current_app.register_blueprint(getattr(routes_module, f'{dict["blueprint_name"]}_routes'), url_prefix=dict['url_prefix'])
+        # #endfor
     #enddef
 
-    # returns the cardinal uid, no parameters required
-    def getCardinalUid(self):
-        return self._uid
+    def _setupApplications(self):
+        """
+        DESCRIPTION:
+        Sets up the applications by creating their databases and initializing them
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - no return
+        """
+
+        applications = Application.query.all()
+
+        for application in applications:
+            # application.delete()
+            self._applications.append(application.to_dict())
+        #endfor
+
+        self._setApplicationRoutes()
     #enddef
 
-    # returns a unique id, no parameters required
-    def _generateUid(self):
+    def _setupThreads(self):
+        pass
+    #enddef
+
+    def _generateUid(self) -> str:
+        """
+        DESCRIPTION:
+        Generates a unique identifier (UID) for the Cardinal instance.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - str: A unique identifier (UID).
+        """
         return str(uuid.uuid4())
     #enddef
 
-    # returns a boolean if the action is completed or not
-    def _force_join_all(self):
-        self._kill_childrens()
-        
-        
-        # TODO: implement this function in the ThreadManager script
-        ThreadManager.force_join_all()
-        return False
-    #enddef
-
-    def getCardinalData(self) -> dict:
-        data = dict()
-
-        data['id'] = self._uid # cardinals uid
-        data['running'] = self._is_running # if the cardinal is running
-        data['master_uid'] = self._master_uid # cardinal master's uid
-        data['master_connection'] = self._master_connection # cardinal master's connection
-        data['threads'] = self._threads # cardinal's threads
-        data['childrens'] = self._childrens # cardinal's possible subordinates
-        data['applications'] = self._applications # cardinal's applications
-
-        return data
-    #enddef
-
-    def cardianlReboot(self):
-        self.shutdown()
-        self._cardinalStart()
-    #enddef
+    #endregion ##
 #endclass

@@ -1,5 +1,6 @@
 # C.E.D. Cardinal Error Detector
-
+# TODO: this will be implemented as the last thing on cardinal
+# last in priority right now and will be
 class Ced:
 
     def __init__(self):

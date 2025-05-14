@@ -4,12 +4,11 @@ import time
 from ..Logging.cardinalLogger import CardinalLogger
 from .thread import CardinalThread
 
-# TODO: fix this class
 
-
-class ThreadManager():
+class aThreadManager():
 
     _logger = None
+    _classname = "CardinalThreadManager"
 
     def __init__(self, logger: CardinalLogger):
         self._logger = logger
@@ -19,12 +18,12 @@ class ThreadManager():
     def newThread(self, id, description, function, args):
         self._logger.debug("creating thread: " + id + " & " + description)
         thread_class = CardinalThread()
-        
+
         return thread_class.new(id, description, function, args) # FIXME: probably wrong
     #enddef
 
     def startThread(self, thread, timout = 10):
-        
+
         if(thread.get_thread_status() == "running"):
             return True
         else:
