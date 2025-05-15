@@ -13,8 +13,8 @@ from flask_bcrypt import Bcrypt
 import configparser
 
 # cardinal imports:
-from core.cardinal.cardinal import Cardinal
-from core.models.models import db
+from core.Cardinal.cardinal import Cardinal
+from core.Models.models import db
 
 # Create App
 app = Flask(__name__, template_folder="core/web/templates")
@@ -30,7 +30,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCH
 db.init_app(app)
 
 # TODO: find a way to not comment / uncomment every time we need a database reset / migration
-# from core.models.models import *
+# from core.Models.models import *
 # with app.app_context():
 #     db.create_all()
 

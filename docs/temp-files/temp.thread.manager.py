@@ -1,7 +1,7 @@
 import threading
 import time
 
-from ..logging.cardinalLogger import CardinalLogger
+from ..Logging.cardinalLogger import CardinalLogger
 from .thread import CardinalThread
 
 

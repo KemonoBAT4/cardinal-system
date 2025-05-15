@@ -3,7 +3,7 @@ import time
 import json
 
 
-from ..logging.cardinalLogger import CardinalLogger
+from ..Logging.cardinalLogger import CardinalLogger
 
 # TODO: finish creating this class
 

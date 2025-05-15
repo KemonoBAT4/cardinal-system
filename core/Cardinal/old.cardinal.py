@@ -8,7 +8,7 @@ import time
 import subprocess
 
 from ..Threads.threadManager import ThreadManager
-from ..logging.cardinalLogger import CardinalLogger
+from ..Logging.cardinalLogger import CardinalLogger
 
 from ..Handler.consoleHandler import ConsoleHandler
 
