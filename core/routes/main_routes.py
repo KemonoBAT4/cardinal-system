@@ -8,7 +8,7 @@ import configparser
 
 # TODO: implement login required
 from flask_login import login_required
-from core.Models.models import *
+from core.models.models import *
 # from core.Web.template import *
 
 main_routes = Blueprint('Main_Routes', __name__)

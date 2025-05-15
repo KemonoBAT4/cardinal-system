@@ -5,7 +5,7 @@ from flask import redirect, url_for, render_template
 
 import configparser
 
-from core.Models.models import *
+from core.models.models import *
 
 # TODO: implement login required
 

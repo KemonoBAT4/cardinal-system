@@ -8,8 +8,8 @@ import time
 import subprocess
 import importlib
 
-from core.Logging.cardinalLogger import CardinalLogger
-from core.Models.models import *
+from core.logging.cardinalLogger import CardinalLogger
+from core.models.models import *
 
 # Import Routes
 from core.routes.cardinal_routes import cardinal_routes

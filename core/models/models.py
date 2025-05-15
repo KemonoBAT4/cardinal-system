@@ -3,7 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import ForeignKey
 from sqlalchemy.orm import backref, relationship
 
-from core.Utils.models import BaseModel, db
+from core.utils.models import BaseModel, db
 
 class User(BaseModel):
 
