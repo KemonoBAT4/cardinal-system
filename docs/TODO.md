@@ -34,7 +34,7 @@
 
 # Cardinal Optionals
 
-- [ ] A.I. Models
+- [ ] A.I. models
   - [ ] A.I. that creates code snippets
   - [ ] A.I. that reviews the code
   - [ ] User input for train A.I. using Cardinal Flask Api
