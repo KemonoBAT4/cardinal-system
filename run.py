@@ -26,18 +26,21 @@ config.read("application.cfg")
 # Setup Database
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
 
+port = int(config.get("Cardinal", "port"))
 # Init app's database
 db.init_app(app)
 
 # TODO: find a way to not comment / uncomment every time we need a database reset / migration
 # from core.Models.models import *
 # with app.app_context():
-#     db.create_all()
+#     # db.drop_all() # drop all tables
+#     db.create_all() # create all tables
+
 
 cardinal = Cardinal(app=app, config=config)
 cardinal.setup()
 
 if __name__ == "__main__":
     cardinal.start()
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=True, host='0.0.0.0', port=port)
 #endif

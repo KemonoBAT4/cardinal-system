@@ -1,6 +1,6 @@
-# The Cardinal System
+# Cardinal
 
-### What is the Cardinl-System
+### What is the Cardinl System
 The idea of cardinal is to create a program that can handle, learn and automate from simple to complex tasks like managing websites, bots or even
 for moderation. The ultimate goal is to merge all the different projects and make them work on a single platform, removing all the problems that 
 might generate wrong configurations. Once the core is ultimated and perfectly functioning, to create a new application on cardinal will only require to pass the repository link of a project
