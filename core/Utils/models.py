@@ -14,8 +14,8 @@ class BaseModel(db.Model):
     _methods_to_avoid = [ "to_dict", "save", "delete", "update", "patch" ]
 
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    # created_at = db.Column(db.DateTime, nullable=False)
-    # updated_at = db.Column(db.DateTime, nullable=False)
+    created_at = db.Column(db.DateTime, nullable=False)
+    updated_at = db.Column(db.DateTime, nullable=False)
 
     def save(self):
         """
@@ -33,13 +33,14 @@ class BaseModel(db.Model):
             "status": True,
             "message": "Object saved successfully"
         }
+
         try:
-            # if self.id is None:
-            #     self.created_at = db.func.current_timestamp()
-            #     self.updated_at = db.func.current_timestamp()
-            # else:
-            #     self.updated_at = db.func.current_timestamp()
-            # #endif
+            if self.id is None:
+                self.created_at = db.func.current_timestamp()
+                self.updated_at = db.func.current_timestamp()
+            else:
+                self.updated_at = db.func.current_timestamp()
+            #endif
 
             db.session.add(self)
             db.session.commit()
@@ -65,7 +66,14 @@ class BaseModel(db.Model):
         RETURN:
         - no return
         """
-        db.session.delete(self)
+
+        try:
+            db.session.query(self.__class__).filter_by(id=self.id).delete(synchronize_session=False)
+        except Exception as e:
+            db.session.rollback()
+            raise Exception(f"Error while deleting object: {str(e)}")
+        #endtry
+        # db.session.delete(self)
         db.session.commit()
     #enddef
 
@@ -156,6 +164,8 @@ class BaseModel(db.Model):
         # for column in self.__table__.columns:
         #     if column.name not in self._methods_to_avoid:
         #         result[column.name] = getattr(self, column.name)
+        # REFACTOR:
+
         for key, value in vars(self).items():
             if not key.startswith('_') and key not in self._methods_to_avoid:
                 result[key] = value

@@ -105,6 +105,8 @@ class Cardinal:
             self._logger.debug(self._showStartData())
             current_app.register_blueprint(cardinal_routes, url_prefix=cardinal_prefix)
             current_app.register_blueprint(main_routes, url_prefix=main_prefix)
+
+            self._logger.debug(f"Listening on port {self._config.get('Cardinal', 'port')}")
         #endif
     #enddef
 
@@ -184,7 +186,7 @@ class Cardinal:
         RETURN:
         - no return
         """
-
+        return 0
         applications = Application.query.all()
 
         for application in applications:
@@ -211,6 +213,32 @@ class Cardinal:
         - str: A unique identifier (UID).
         """
         return str(uuid.uuid4())
+    #enddef
+
+    def _resetDatabase(self):
+        """
+        DESCRIPTION:
+        Resets the database by dropping all tables and creating new ones.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - no return
+        """
+        try:
+            if self._db is not None:
+                self._logger.debug("Resetting the database . . .")
+                self._db.drop_all()
+                self._db.create_all()
+                self._logger.debug("Database reset complete")
+            else:
+                self._logger.error("Database is not set up. Cannot reset.")
+            #endif
+        except Exception as e:
+            self._logger.error(f"Error resetting the database: {e}")
+            self._logger.debug("See the log file for the complete error.")
+        #endtry
     #enddef
 
     #endregion ##

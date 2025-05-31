@@ -7,8 +7,11 @@ import os
 import configparser
 
 # TODO: implement login required
-from flask_login import login_required
+# from flask_login import login_required
 from core.Models.models import *
+from core.handlers.handlers import *
+
+
 # from core.Web.template import *
 
 main_routes = Blueprint('Main_Routes', __name__)
@@ -18,18 +21,14 @@ config.read("application.cfg")
 
 @main_routes.route("/", methods=['GET', 'POST'])
 def index():
-    return redirect("/home")
+    return redirect(url_for('Main_Routes.home')) # redurect to the home page
 #enddef
 
 @main_routes.route("/home", methods=['GET'])
 def home():
-    # return "home page test"
-
     current_version = config.get("Cardinal", "version")
-    username = "Kemono_BAT_4"
-    # username = current_user.username
+    username = "Kemono_BAT_4" # current_user.username
     title = "The Cardinal System"
-
 
     return render_template(
         'homepage.html',
@@ -37,8 +36,6 @@ def home():
         logged_user=username,
         main_title=title
     )
-
-    # home page
 #enddef
 
 @main_routes.route("/login", methods=['GET'])
@@ -52,7 +49,7 @@ def dashboard_routes():
 
 #################
 # GET THE FILES #
-#################
+#region #########
 
 @main_routes.route("/styles/<string:app>/<path:filename>", methods=['GET'])
 def styles(app, filename):
@@ -67,3 +64,5 @@ def scripts(app, filename):
         return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'scripts'), filename)
     #enddef
 #enddef
+
+#endregion

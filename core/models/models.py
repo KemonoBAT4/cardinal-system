@@ -48,13 +48,10 @@ class Application(BaseModel):
     blueprint_name = db.Column(db.String(255), nullable=False)
     folder_path = db.Column(db.Text, nullable=False)
     url_prefix = db.Column(db.String(255), nullable=False)
-#endclass
 
-class Undefined(BaseModel):
+    is_active = db.Column(db.Boolean, default=True, nullable=False)
 
-    _classname = "Undefined"
-    __tablename__ = "undefined"
-
-    name = db.Column(db.String(255), unique=True, nullable=False)
-    description = db.Column(db.Text, unique=False, nullable=False)
+    def method(self):
+        return "This is a method from the Application class."
+    #enddef
 #endclass
