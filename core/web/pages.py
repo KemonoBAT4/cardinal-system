@@ -20,12 +20,14 @@ class Page:
     subtitle = None
 
     template = "index.html"
+    icon = "/icons/cardinal/favicon.ico"
 
-    def __init__( self, website_title="", title="", subtitle=""):
+    def __init__( self, website_title="", title="", subtitle="", icon=None):
 
         self.title = title
         self.subtitle = subtitle
         self.website_title = website_title if website_title != "" else title
+        self.icon = icon if icon is not None else self.icon
     #enddef
 
     def card(self):
@@ -43,6 +45,7 @@ class Page:
     def render(self):
         return render_template(
             self.template,
+            icon=self.icon,
             website_title=self.website_title,
             page_title=self.title,
             sections=[section.html() for section in self.sections],

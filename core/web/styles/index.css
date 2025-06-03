@@ -104,12 +104,11 @@ body, html {
             background-color: gray;
 
             .sidebar-content-container {
-                width: 80%;
+                width: 90%;
                 height: 97%;
 
                 background-color: red;
             }
-
         }
 
         .version-container {

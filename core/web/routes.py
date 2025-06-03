@@ -68,4 +68,12 @@ def scripts(app, filename):
     #enddef
 #enddef
 
+
+@main_routes.route("/icons/<string:app>/<path:filename>", methods=['GET'])
+def icons(app, filename):
+    if "cardinal" in app.lower():
+        return send_from_directory(os.path.join(os.path.dirname(__file__), '..', 'web', 'icons'), filename)
+    #enddef
+#enddef
+
 #endregion
