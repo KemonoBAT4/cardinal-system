@@ -28,6 +28,7 @@ class Page:
         self.subtitle = subtitle
         self.website_title = website_title if website_title != "" else title
         self.icon = icon if icon is not None else self.icon
+        self.logged_user = "Not logged in"  # This should be replaced with the actual logged-in user, e.g., current_user.username
     #enddef
 
     def card(self):
@@ -48,6 +49,7 @@ class Page:
             icon=self.icon,
             website_title=self.website_title,
             page_title=self.title,
+            logged_user=self.logged_user,
             sections=[section.html() for section in self.sections],
             cardinal_version=config.get("Cardinal", "version")
         )
