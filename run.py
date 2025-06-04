@@ -24,6 +24,7 @@ config.read("application.cfg")
 # Setup Database
 app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
 
+host = config.get("Cardinal", "host")
 port = int(config.get("Cardinal", "port"))
 
 # Init app's database
@@ -34,5 +35,5 @@ cardinal.setup()
 
 if __name__ == "__main__":
     cardinal.start()
-    app.run(debug=True, host='0.0.0.0', port=port)
+    app.run(debug=True, host=host, port=port)
 #endif
