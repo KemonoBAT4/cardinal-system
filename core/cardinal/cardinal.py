@@ -51,15 +51,6 @@ class Cardinal:
         self._app_context.pop()
     #enddef
 
-    def setup(self):
-        """
-        DESCRIPTION:
-        sets all the variables needed
-        """
-        pass
-        # self._setupApplications()
-    #enddef
-
     def start(self):
         """
         DESCRIPTION:
@@ -72,10 +63,38 @@ class Cardinal:
         RETURN:
         - no return
         """
-        cardinal_prefix = f'/cardinal'
         main_prefix = f'/'
 
         current_app.register_blueprint(main_routes, url_prefix=main_prefix)
+
+        # initialize all the applications
+        # # # # # # # # import os
+        # # # # # # # # import importlib
+
+        # # # # # # # # applications_folder = 'applications'
+
+        # # # # # # # # # Get all folder names inside the applications folder
+        # # # # # # # # app_folders = [f.name for f in os.scandir(applications_folder) if f.is_dir()]
+
+        # # # # # # # # for app_folder in app_folders:
+        # # # # # # # #     try:
+        # # # # # # # #         # Construct the module path for the routes file
+        # # # # # # # #         routes_module_path = f'{applications_folder}.{app_folder}.routes'
+
+        # # # # # # # #         # Import the routes module
+        # # # # # # # #         routes_module = importlib.import_module(routes_module_path)
+
+        # # # # # # # #         # Get the <applicationname_routes> variable
+        # # # # # # # #         app_routes_var_name = f'{app_folder}_routes'
+        # # # # # # # #         if hasattr(routes_module, app_routes_var_name):
+        # # # # # # # #             app_routes = getattr(routes_module, app_routes_var_name)
+        # # # # # # # #             print(f'Routes for {app_folder}: {app_routes}')
+        # # # # # # # #         else:
+        # # # # # # # #             print(f'No routes variable found for {app_folder}')
+        # # # # # # # #     except Exception as e:
+        # # # # # # # #         print(f'Error processing {app_folder}: {e}')
+
+
         # if not self._running:
         #     self._running = True
 
@@ -83,7 +102,29 @@ class Cardinal:
             # self._logger.debug(self._showStartData())
             # self._setupApplications()
             # self._startApplications()
+    #enddef
 #endclass
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # class Handlers:
 #     def __init__(self):

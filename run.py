@@ -31,7 +31,6 @@ port = int(config.get("Cardinal", "port"))
 db.init_app(app)
 
 cardinal = Cardinal(app=app, config=config)
-cardinal.setup()
 
 if __name__ == "__main__":
     cardinal.start()
