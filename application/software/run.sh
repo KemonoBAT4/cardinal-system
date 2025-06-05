@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# TEMPLATE SCRIPT, MAKE CHANGES AS NEEDED #
+###########################################
+
 # Navigate to the directory containing package.json
 cd "$(dirname "$0")"
 
