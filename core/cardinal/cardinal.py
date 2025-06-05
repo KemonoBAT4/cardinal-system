@@ -7,11 +7,13 @@ import threading
 import time
 import subprocess
 import importlib
+import json
 
 from core.models.base import db
 from core.models.models import *
 from core.handlers.handlers import *
 from core.web.routes import main_routes
+from application.routes import routes
 
 from flask import current_app
 
@@ -30,13 +32,14 @@ class Cardinal:
     _version = None
     _api_version = None
 
-    def __init__(self, app, config: configparser.ConfigParser = None):
+    def __init__(self, app, config: dict):
 
         self._app = app
         self._app_context = app.app_context()
         self._app_context.push()
 
-        self._config = config if config else configparser.ConfigParser()
+        self._config = config
+        # self._config = config if config else configparser.ConfigParser()
 
         self._db = db
 
@@ -65,7 +68,19 @@ class Cardinal:
         """
         main_prefix = f'/'
 
+        # register the main routes
         current_app.register_blueprint(main_routes, url_prefix=main_prefix)
+
+        # register the application routes
+        json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", 'application', 'config.json')
+        print(json_path)
+        data = {}
+
+        with open(json_path, 'r') as f:
+            data = json.load(f)
+        #endwith
+
+        current_app.register_blueprint(routes, url_prefix=data.get("prefix"))
 
         # initialize all the applications
         # # # # # # # # import os

@@ -10,6 +10,8 @@ from flask_bcrypt import Bcrypt
 from core.cardinal.cardinal import Cardinal
 
 import configparser
+import json
+import os
 
 from core.cardinal.cardinal import Cardinal
 from core.models.base import db
@@ -22,15 +24,24 @@ config = configparser.ConfigParser()
 config.read("application.cfg")
 
 # Setup Database
-app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
+# app.config['SQLALCHEMY_DATABASE_URI'] = config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')
 
 host = str(config.get("Cardinal", "host"))
 port = int(config.get("Cardinal", "port"))
 
+# register the application routes
+json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'application', 'config.json')
+
+data = {}
+
+with open(json_path, 'r') as f:
+    data = json.load(f)
+#endwith
+
 # Init app's database
 db.init_app(app)
 
-cardinal = Cardinal(app=app, config=config)
+cardinal = Cardinal(app=app, config=data)
 
 if __name__ == "__main__":
     cardinal.start()
