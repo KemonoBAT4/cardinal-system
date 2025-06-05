@@ -8,5 +8,5 @@ from .handlers import *
 
 class undefined(BaseModel):
     pass
-
+#endclass
 

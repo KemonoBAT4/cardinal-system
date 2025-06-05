@@ -73,13 +73,11 @@ class Cardinal:
 
         # register the application routes
         json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", 'application', 'config.json')
-        print(json_path)
         data = {}
 
         with open(json_path, 'r') as f:
             data = json.load(f)
         #endwith
-
         current_app.register_blueprint(routes, url_prefix=data.get("prefix"))
 
         # initialize all the applications
