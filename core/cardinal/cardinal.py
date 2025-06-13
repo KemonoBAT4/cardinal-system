@@ -24,6 +24,7 @@ class Cardinal:
     _db = None
 
     _config = None
+    _preix = None
 
     _applications = []  # a list of all the application data
     _threads = []
@@ -32,13 +33,14 @@ class Cardinal:
     _version = None
     _api_version = None
 
-    def __init__(self, app, config: dict):
+    def __init__(self, app):
 
         self._app = app
         self._app_context = app.app_context()
         self._app_context.push()
 
-        self._config = config
+        self._config = self.getConfig()
+        self._preix = self.getApplicationRoutePrefix()
         # self._config = config if config else configparser.ConfigParser()
 
         self._db = db
@@ -66,19 +68,10 @@ class Cardinal:
         RETURN:
         - no return
         """
-        main_prefix = f'/'
 
         # register the main routes
-        current_app.register_blueprint(main_routes, url_prefix=main_prefix)
-
-        # register the application routes
-        json_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "..", 'application', 'config.json')
-        data = {}
-
-        with open(json_path, 'r') as f:
-            data = json.load(f)
-        #endwith
-        current_app.register_blueprint(routes, url_prefix=data.get("prefix"))
+        current_app.register_blueprint(main_routes, url_prefix="/")
+        current_app.register_blueprint(routes, url_prefix=self._prefix)
 
         # initialize all the applications
         # # # # # # # # import os
@@ -116,58 +109,73 @@ class Cardinal:
             # self._setupApplications()
             # self._startApplications()
     #enddef
+
+    def getApplicationRoutePrefix(self) -> str:
+        """
+        DESCRIPTION:
+        Retrieves the application route prefix from the configuration file.
+        the prefix cannot be empty, a slash (/) or double slash (//).
+        If the prefix is not set, it defaults to '/app'.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - A string representing the application route prefix.
+        """
+
+        prefix = self._config.get("prefix")
+        prefix = prefix.strip() if prefix != '' else '/app'
+
+        if len(prefix) > 1 or prefix != '/' and prefix != '//':
+            if prefix[0] != '/':
+                prefix = f'/{prefix}'
+            #endif
+
+            if prefix[-1] == '/':
+                prefix = prefix[:-1]
+            #endif
+        else:
+            prefix = '/app'
+        #endif
+        return prefix
+    #enddef
+
+    def getConfig(self) -> dict:
+        data = {}
+
+        with open(f'{os.path.dirname(os.path.realpath(__file__))}\config.json', 'r') as f:
+            data = json.load(f)
+        #endwith
+
+        return data
+    #enddef
+
+    def resetDatabase(self) -> bool:
+        """
+        DESCRIPTION:
+        Resets the database by dropping all tables and creating new ones.
+
+        PARAMETERS:
+        - no parameters required
+
+        RETURN:
+        - True if the database was reset successfully, False otherwise.
+        """
+        try:
+            if self._db is not None:
+                self._db.drop_all()
+                self._db.create_all()
+                return True
+            else:
+                raise Exception("Database is not set up. Cannot reset.")
+            #endif
+        except Exception as e:
+            print(f"Error resetting the database: {e}")
+            # logger.error(f"Error resetting the database: {e}")
+            # logger.debug("See the log file for the complete error.")
+        #endtry
+        return False
+    #enddef
 #endclass
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# class Handlers:
-#     def __init__(self):
-#         pass
-
-# logger = CardinalLogger()
-
-# def resetDatabase(self):
-#     """
-#     DESCRIPTION:
-#     Resets the database by dropping all tables and creating new ones.
-
-#     PARAMETERS:
-#     - no parameters required
-
-#     RETURN:
-#     - no return
-#     """
-#     try:
-#         if db is not None:
-#             logger.debug("Resetting the database . . .")
-#             db.drop_all()
-#             db.create_all()
-#             logger.debug("Database reset complete")
-#         else:
-#             logger.error("Database is not set up. Cannot reset.")
-#         #endif
-#     except Exception as e:
-#         logger.error(f"Error resetting the database: {e}")
-#         logger.debug("See the log file for the complete error.")
-#     #endtry
-# #endde
 

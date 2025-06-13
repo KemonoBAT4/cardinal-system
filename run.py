@@ -38,9 +38,9 @@ with open(json_path, 'r') as f:
     data = json.load(f)
 #endwith
 
-app.config['SQLALCHEMY_DATABASE_URI'] = data.get("sql_alchemy_uri")
 try:
-    port = int(data.get("port"))
+    app.config['SQLALCHEMY_DATABASE_URI'] = data.get("sql_alchemy_uri") if data.get("sql_alchemy_uri") != "" else config.get("Cardinal", "SQLALCHEMY_DATABASE_URI")
+    port = int(data.get("server_port"))
 except ValueError:
     port = int(config.get("Cardinal", "port"))
 #endtry
