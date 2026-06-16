@@ -18,14 +18,13 @@ class Task(BaseModel):
     status      = db.Column(db.Enum(TaskStatus), nullable=False, default=TaskStatus.OPEN)
 
     @classmethod
-    def open(
+    def new(
         cls,
         title       : "str",
         user_id     : "int",
         description : "str"                      = "",
         from_date   : "datetime.datetime | None" = None,
         to_date     : "datetime.datetime | None" = None,
-        _save       : "bool"                     = False
     ) -> "Task":
 
         task: Task = cls(
@@ -37,10 +36,6 @@ class Task(BaseModel):
         )
 
         task.status = TaskStatus.OPEN
-
-        if _save:
-            task.save()
-        # #endif
 
         return task
     # #enddef new
@@ -60,5 +55,16 @@ class Note(BaseModel):
 
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     user    = db.relationship('User', backref=db.backref('notes', lazy=True))
+
+    status  = db.Column(db.Enum(NoteStatus), nullable=False, default=NoteStatus.OPEN)
+
+    @classmethod
+    def new(cls, title: str, text: str, user_id: int, _save: bool = False) -> "Note":
+        note: Note = cls(title=title, text=text, user_id=user_id)
+        if _save:
+            note.save()
+        # #endif
+        return note
+    # #enddef
 
 # #endclass Note

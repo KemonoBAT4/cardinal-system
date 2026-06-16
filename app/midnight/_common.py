@@ -33,4 +33,9 @@ class TaskStatus(Enum):
     CANCELLED   = "cancelled"
 # #endclass TaskStatus
 
+class NoteStatus(Enum):
+    OPEN    = "open"
+    CLOSED  = "closed"
+# #endclass NoteStatus
+
 #endregion #####
