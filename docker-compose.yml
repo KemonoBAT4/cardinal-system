@@ -174,6 +174,105 @@ services:
     networks:
       - cardinal_net
 
+  # ─────────────────────────────
+  # cardinal
+  # ─────────────────────────────
+  cardinal:
+    build:
+      context: .
+      args:
+        APP_NAME: cardinal
+
+    image: cardinal-cardinal
+    container_name: cardinal_cardinal
+
+    restart: unless-stopped
+
+    working_dir: /Cardinal
+
+    # container idle in dev
+    entrypoint: ""
+    command: tail -f /dev/null
+
+    volumes:
+      - .:/Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: cardinal
+
+      DB_HOST: db_cardinal
+      DB_PORT: 3306
+      DB_NAME: ${CARDINAL_DB_NAME:-cardinal}
+      DB_USER: ${CARDINAL_DB_USER:-cardinal}
+      DB_PASSWORD: ${CARDINAL_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${CARDINAL_SECRET_KEY:-changeme}
+
+    ports:
+      - "23104:23104"
+
+    depends_on:
+      db_cardinal:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+  # ─────────────────────────────
+  # cardinal DB
+  # ─────────────────────────────
+  db_cardinal:
+    image: mysql:8.0
+
+    container_name: cardinal_db_core
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${CARDINAL_DB_NAME:-cardinal}
+      MYSQL_USER: ${CARDINAL_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${CARDINAL_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${CARDINAL_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_cardinal_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "cardinal",
+          "--password=${CARDINAL_DB_PASSWORD:-changeme}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # ─────────────────────────────
 # volumes
@@ -181,6 +280,7 @@ services:
 volumes:
   db_moviecatalog_data:
   db_midnight_data:
+  db_cardinal_data:
 
 
 # ─────────────────────────────
