@@ -1,11 +1,13 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, or_
 from sqlalchemy.orm import backref, relationship
 
 import bcrypt
 import typing
+import datetime
+from enum import Enum
 
 from core.handlers import get_class_repr
 from core.configs import generate_uuid
@@ -185,9 +187,17 @@ class BaseModel(db.Model):
 
         for key, value in vars(self).items():
             if not callable(getattr(self, key)) and not key.startswith('_'):
-                result[key] = value
+
+                if (isinstance(value, datetime.datetime) or isinstance(value, datetime.date)):
+                    result[key] = value.isoformat()
+                elif (isinstance(value, Enum)):
+                    result[key] = value.value
+                else:
+                    result[key] = value
+                # #endif
             # #endif
         # #endfor
+
 
         return result
     # #enddef to_dict

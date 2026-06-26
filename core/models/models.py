@@ -5,13 +5,14 @@ class User(UserMixin, BaseModel):
 
     __tablename__ = "users"
 
-    name            = db.Column(db.String(80) , nullable=False)
-    surname         = db.Column(db.String(80) , nullable=False)
-    email           = db.Column(db.String(120), unique=True, nullable=False)
-    hashed_password = db.Column(db.LargeBinary, nullable=False)
+    name            = db.Column(db.String(80) , nullable=False )
+    surname         = db.Column(db.String(80) , nullable=False )
+    username        = db.Column(db.String(80) , nullable=False, unique=True )
+    email           = db.Column(db.String(120), nullable=False, unique=True )
+    hashed_password = db.Column(db.LargeBinary, nullable=False )
 
     @classmethod
-    def register(cls, email: str, name: str, surname: str, password: str) -> "User | tuple":
+    def register(cls, username: str, email: str, name: str, surname: str, password: str) -> "User | tuple":
         """
         #### DESCRIPTION:
         Adds a new user with the provided password.
@@ -26,7 +27,13 @@ class User(UserMixin, BaseModel):
         - tuple: A tuple containing the status and message of the operation.
         """
 
-        found_user: "User | None" = User.query.filter(User.email == email).first()
+        found_user: "User | None" = User.query.filter(
+            or_(
+                User.email    == email,
+                User.username == username
+            )
+        ).first()
+
 
         if (found_user is not None):
             return User.Result(False, "User already exists").result()
@@ -38,6 +45,7 @@ class User(UserMixin, BaseModel):
         user: "User" = User(
             name            = name,
             surname         = surname,
+            username        = username,
             email           = email,
             hashed_password = hashed_password
         )
@@ -47,15 +55,18 @@ class User(UserMixin, BaseModel):
     #enddef
 
     @classmethod
-    def login(cls, email: str, password: str) -> "User | tuple":
+    def login(cls, username: str, password: str) -> "User | tuple":
 
-        user: "User | None" = User.query.filter(User.email == email).first()
+        user: "User | None" = User.query.filter(
+            User.username == username
+        ).first()
+
 
         if user is None:
             return cls.Result(False, "User not found").result()
         # #endif
 
-        if not bcrypt.checkpw(password.encode("utf-8"), user.password_hash):
+        if not bcrypt.checkpw(password.encode("utf-8"), user.hashed_password):
             return cls.Result(False, "Invalid password").result()
         # #endif
         return user
@@ -73,6 +84,28 @@ class User(UserMixin, BaseModel):
 
         return super().save()
     # #enddef save
+
+    def to_dict(self) -> dict:
+        """
+        #### DESCRIPTION:
+        Converts the model instance to a dictionary representation.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - dict: A dictionary representation of the model instance.
+        """
+        result: dict = { }
+
+        for key, value in vars(self).items():
+            if ((not callable(getattr(self, key))) and (not key.startswith('_')) and (key != "hashed_password")):
+                result[key] = value
+            # #endif
+        # #endfor
+
+        return result
+    # #enddef to_dict
 #endclass
 
 class Role(BaseModel):
