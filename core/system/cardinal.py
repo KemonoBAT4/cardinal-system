@@ -34,7 +34,7 @@ from core.models.models import User
 class Cardinal:
 
     _config: "configparser.ConfigParser"
-    _name  : "str | None" = None
+    _name  : "str"
 
     _app        :"Flask"
     _app_context: "typing.Any"
@@ -279,6 +279,11 @@ class Cardinal:
     #region ######
 
     @property
+    def name(self) -> str:
+        return self._name
+    # #enddef name    
+
+    @property
     def app(self) -> Flask:
         return self._app
     # #enddef app
@@ -348,7 +353,7 @@ class Cardinal:
         login_manager = LoginManager()
 
         login_manager.init_app(self._app)
-        login_manager.login_view = "access.login" # type: ignore
+        login_manager.login_view = "auth.login" # type: ignore
 
         @login_manager.user_loader
         def load_user(user_id: int) -> "User | None":
@@ -582,4 +587,4 @@ class Cardinal:
     def __repr__(self) -> str:
         return get_class_repr(classobject=self.__class__, description=self._config.get('Cardinal', 'version'))
     # #enddef __repr__
-#endclass
+# #endclass
