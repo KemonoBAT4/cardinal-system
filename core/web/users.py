@@ -36,7 +36,7 @@ def register():
         # TODO: implement register
         data = request.get_json()
 
-        pass
+        return ""
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Register")
         return page.render()
@@ -50,7 +50,7 @@ def me():
     tempUserLogged = False
 
     if (tempUserLogged == False):
-        return redirect(url_for("access.login"))
+        return redirect(url_for("auth.login"))
     else:
         page = Page(page_title="The Cardinal System", title="Cardinal: Me")
         return page.render()
@@ -68,5 +68,5 @@ def logout():
         pass
     #endif
 
-    return redirect(url_for("access.login"))
+    return redirect(url_for("auth.login"))
 #enddef

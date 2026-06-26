@@ -1,5 +1,6 @@
 # other imports
 import os
+from pathlib import Path
 
 # flask imports
 from flask import Blueprint, redirect, url_for
@@ -26,7 +27,6 @@ def index():
 @routes.route("/home", methods=['GET'])
 @login_required
 def home():
-    current_version = config.get("Cardinal", "version")
     page_title = "The Cardinal System"
     title = "Cardinal: Home"
 
@@ -37,6 +37,42 @@ def home():
     page.addCard(card)
     return page.render()
 #enddef
+
+@routes.route("/settings", methods=['GET', 'POST'])
+@login_required
+def settings():
+    pass
+    return ""
+
+@routes.route("/available/applications", methods=['GET'])
+# @login_required
+def avaiable_applications():
+
+    page_title = "The Cardinal System"
+    title      = "Cardinal: Available Applications"
+
+    page = Page(page_title = page_title, title = title)
+    card = Card(title)
+
+    section = Section().table(
+        url = "/api/v1/available/applications",
+        config = {
+            "columns": {
+                "name"        : { "title": "Nome Applicazione" },
+                "version"     : { "title": "Versione"          },
+                "author"      : { "title": "Autore"            },
+                "api_version" : { "title": "Versione API"      },
+                "host"        : { "title": "Host"              },
+                "port"        : { "title": "Porta"             }
+            }
+        }
+    )
+
+    card.addSection(section)
+    page.addCard(card)
+
+    return page.render()
+# #enddef
 
 ##################
 # ABOUT CARDINAL #

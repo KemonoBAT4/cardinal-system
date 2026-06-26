@@ -63,7 +63,7 @@ class Section:
 
     def __init__(
         self,
-        title: str = "",
+        title   : str = "",
         subtitle: str = "",
     ) -> "None":
         self.title = title
@@ -82,7 +82,6 @@ class Section:
     ) -> "Section":
 
         self._type = SectionTypeEnum.TABLE
-        # self.template = "sections/table.html"
         self.context = { "url": url }
 
         self.template = CardinalDataTable(
@@ -255,9 +254,15 @@ class Page:
     def _get_menu_items(self):
         menu_items = []
 
-        with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
-            menu_items = json.load(f)
-        # #enddef
+        if str(system.cardinal._name).lower() == "cardinal":
+            with open(F'{ROOT_PATH}/core/web/menu.json') as f:
+                menu_items = json.load(f)
+            # #endwith
+        else:
+            with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
+                menu_items = json.load(f)
+            # #endwith
+        # #endif
 
         return menu_items
     # #enddef _get_menu_items
@@ -265,10 +270,11 @@ class Page:
     def render(self):
         return render_template(
             "index.html",
-            page = self,
-            logged_user = logged_user(),
+            app_name         = system.cardinal.name.title(),
+            page             = self,
+            logged_user      = logged_user(),
             cardinal_version = config.get("Cardinal", "version"),
-            menu_items = self._get_menu_items()
+            menu_items       = self._get_menu_items()
         )
     # #enddef render
 # #endclass
