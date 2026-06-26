@@ -43,7 +43,6 @@ Cardinal/                                           - THE MAIN FOLDER
 |    |    |    └── Structure.md
 |    |    ├── images/                               - AN EXAMPLE APP (DONT USE)
 |    |    |    └── dashboard_example_v-a_0-1-2.png  - THE IMAGE FOR README
-|    |    ├── Environment.md                        - HOW TO SETUP ENVIRONMENT
 |    |    ├── Structure.md                          - THE STRUCTURE FILE
 |    |    └── Versions.md                           - INFOS ABOUT THE VERSIONS
 |    ├── forms/                                     - CARDINAL FORMS FOLDER
