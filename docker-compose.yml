@@ -38,9 +38,10 @@ services:
       DB_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
 
       SECRET_KEY: ${MOVIECATALOG_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${MOVIECATALOG_JWT_SECRET_KEY:-your-secret-key-change-in-production}
 
     ports:
-      - "23104:23104"
+      - "23105:23104"
 
     depends_on:
       db_moviecatalog:
@@ -123,9 +124,10 @@ services:
       DB_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
 
       SECRET_KEY: ${MIDNIGHT_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${MIDNIGHT_JWT_SECRET_KEY:-your-secret-key-change-in-production}
 
     ports:
-      - "23104:23104"
+      - "23106:23104"
 
     depends_on:
       db_midnight:
@@ -208,6 +210,7 @@ services:
       DB_PASSWORD: ${CARDINAL_DB_PASSWORD:-changeme}
 
       SECRET_KEY: ${CARDINAL_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${CARDINAL_JWT_SECRET_KEY:-your-secret-key-change-in-production}
 
     ports:
       - "23104:23104"
@@ -257,22 +260,6 @@ services:
 
     networks:
       - cardinal_net
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # ─────────────────────────────
 # volumes
