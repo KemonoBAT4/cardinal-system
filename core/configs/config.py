@@ -11,8 +11,8 @@ import uuid
 config = configparser.ConfigParser()
 
 args: list  = sys.argv.copy()
-runner: str = args.pop(0) # run.py
-name: str   = args.pop(0) # name
+runner: str = args.pop(0) if len(args) > 0 else "run.py" # run.py
+name: str   = args.pop(0) if len(args) > 0 else "cardinal" # name
 
 ROOT_PATH: str = os.path.join((os.path.dirname(os.path.abspath(__file__))), "..", "..")
 
