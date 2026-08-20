@@ -18,7 +18,7 @@ def available_applications():
     for folder in app_path.iterdir():
 
         if folder.is_dir():
-            
+
             if folder.name != "cardinal":
                 cfg_files = list(folder.glob("*.cfg"))
 
@@ -38,7 +38,7 @@ def available_applications():
                     )
                 # #endfor
             # #endif
-        # #endif    
+        # #endif
     # #endfor
 
     print(result)

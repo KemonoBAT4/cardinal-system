@@ -222,7 +222,7 @@ class Page:
         title: str = "",
         subtitle: str = "",
 
-        _icon: typing.Any = "/icons/cardinal/favicon.ico",
+        _icon: typing.Any = "/_cardinal/icons/cardinal/favicon.ico",
     ) -> "None":
 
         self.page_title = page_title
