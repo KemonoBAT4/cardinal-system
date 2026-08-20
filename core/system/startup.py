@@ -103,11 +103,14 @@ class Cardinal:
         self._port = port if port is not None else self._port
 
         if (self._name != "cardinal"):
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
+            # NOTE: [OLD] old implementation
+            # self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
+            # self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
+
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/api/v{self._config.get('Cardinal', 'api')}")
         #endif
 
-        # print(self._app.url_map)
 
         welcome_text = f"""
 
@@ -281,7 +284,7 @@ class Cardinal:
     @property
     def name(self) -> str:
         return self._name
-    # #enddef name    
+    # #enddef name
 
     @property
     def app(self) -> Flask:
@@ -399,8 +402,8 @@ class Cardinal:
         self._port = int(self._config.get("Cardinal", "port"))
 
         # core blueprints setup for the application
-        self._addBlueprint(routes, "/")
-        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
+        self._addBlueprint(routes, "/_cardinal")
+        self._addBlueprint(api, f"/_cardinal/api/v{self._config.get('Cardinal', 'api')}")
         self._addBlueprint(auth, "/auth")
     # #enddef _initApplication
 
