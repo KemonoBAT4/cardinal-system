@@ -36,7 +36,7 @@ def movie_list():
     card = Card("Lista di tutti i Film")
 
     movie_list_section = Section(title = "Lista di tutti i Film Presenti").table(
-        url = "/moviecatalog/api/v1/movie/list",
+        url = "/api/v1/movie/list",
         config = {
             "columns": {
                 "id"             : { "title": "ID"          },
@@ -44,7 +44,7 @@ def movie_list():
                 "description"    : { "title": "Descrizione" },
             }
         },
-        click = "/moviecatalog/dashboard/movie/edit/{id}"
+        click = "/dashboard/movie/edit/{id}"
     )
 
     card.addSection(movie_list_section)
@@ -89,7 +89,7 @@ def configuration_movie_list():
     card = Card("Lista di tutti i Film")
 
     movie_list_section = Section(title = "Lista di tutti i Film Presenti").table(
-        url = "/moviecatalog/api/v1/movie/list",
+        url = "/api/v1/movie/list",
         config = {
             "columns": {
                 "id"             : { "title": "ID"          },
@@ -98,7 +98,6 @@ def configuration_movie_list():
                 "movie_file_name": { "title": "Nome File"   },
             }
         },
-        click = ""
     )
 
     card.addSection(movie_list_section)

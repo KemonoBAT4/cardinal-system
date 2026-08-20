@@ -1,26 +1,26 @@
 [
     {
         "name": "Lista Film                                                                                                                                                                                                                                         ",
-        "url" : "/moviecatalog/dashboard/movie/list",
+        "url" : "/dashboard/movie/list",
         "icon": "fas fa-home"
     },
     {
         "name": "Configurazione",
-        "activateon": "/moviecatalog/configuration/**",
+        "activateon": "/configuration/**",
         "children": [
             {
                 "name": "Film",
-                "url": "/moviecatalog/configuration/movie/list",
+                "url": "/configuration/movie/list",
                 "icon": "fas fa-home"
             },
             {
                 "name": "Attori",
-                "url": "/moviecatalog/configuration/person/actor/list",
+                "url": "/configuration/person/actor/list",
                 "icon": "fas fa-home"
             },
             {
                 "name": "Cast",
-                "url": "/moviecatalog/configuration/person/cast/list",
+                "url": "/configuration/person/cast/list",
                 "icon": "fas fa-home"
             }
         ]
