@@ -43,36 +43,7 @@ def home():
 def settings():
     pass
     return ""
-
-@routes.route("/available/applications", methods=['GET'])
-# @login_required
-def avaiable_applications():
-
-    page_title = "The Cardinal System"
-    title      = "Cardinal: Available Applications"
-
-    page = Page(page_title = page_title, title = title)
-    card = Card(title)
-
-    section = Section().table(
-        url = "/api/v1/available/applications",
-        config = {
-            "columns": {
-                "name"        : { "title": "Nome Applicazione" },
-                "version"     : { "title": "Versione"          },
-                "author"      : { "title": "Autore"            },
-                "api_version" : { "title": "Versione API"      },
-                "host"        : { "title": "Host"              },
-                "port"        : { "title": "Porta"             }
-            }
-        }
-    )
-
-    card.addSection(section)
-    page.addCard(card)
-
-    return page.render()
-# #enddef
+#enddef settings
 
 ##################
 # ABOUT CARDINAL #
@@ -87,7 +58,7 @@ def about():
     page = Page(page_title=page_title, title=title)
 
     return page.render()
-#enddef
+#enddef about
 
 #endregion #######
 

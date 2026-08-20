@@ -8,4 +8,3 @@ import json
 
 # core imports
 from core import configs
-
