@@ -41,7 +41,7 @@ services:
       JWT_SECRET_KEY: ${MOVIECATALOG_JWT_SECRET_KEY:-your-secret-key-change-in-production}
 
     ports:
-      - "23105:23104"
+      - "23105:23105"
 
     depends_on:
       db_moviecatalog:
@@ -127,7 +127,7 @@ services:
       JWT_SECRET_KEY: ${MIDNIGHT_JWT_SECRET_KEY:-your-secret-key-change-in-production}
 
     ports:
-      - "23106:23104"
+      - "23106:23106"
 
     depends_on:
       db_midnight:
