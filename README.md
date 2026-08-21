@@ -23,6 +23,10 @@ In this first version of Cardinal the first way to start as development an appli
 - for a simple setup of an application, before running it, do `python run.py <application name> setup`
 - now its possible to run the command `python run.py <application name> run`
 
+- enabled `./run.sh --help` for a listing all the commands
+- enabled the creation of a dedicated `docker-compose.yml` specific for every application
+
+
 <!--  (- install all the requirements with `pip install -r requirements.txt`) -->
 <!--  (- run cardinal with `python run.py`) -->
 <!--  (- visit the dashboard page `/cardinal/dashboard` to see the dashboard) -->
