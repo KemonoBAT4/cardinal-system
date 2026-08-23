@@ -36,7 +36,7 @@ def home():
 
     page.addCard(card)
     return page.render()
-#enddef
+#enddef home
 
 @routes.route("/settings", methods=['GET', 'POST'])
 @login_required
@@ -44,6 +44,13 @@ def settings():
     pass
     return ""
 #enddef settings
+
+@routes.route("/application/status", methods=['GET'])
+@login_required
+def status():
+    pass
+    return ""
+#enddef status
 
 ##################
 # ABOUT CARDINAL #
