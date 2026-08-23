@@ -66,8 +66,8 @@
                 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
                 <div class="content-container">
-                    {% for card in page.cards %}
-                        {{ card.render() | safe }}
+                    {% for renderable in page.renderable_objects_list %}
+                        {{ renderable.render() | safe }}
                     {% endfor %}
                 </div>
             </div>
