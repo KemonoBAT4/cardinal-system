@@ -1,6 +1,10 @@
 # Versions in Cardinal
 Here's an explenation of the versions and patches of Cardinal with all the features developed for a specific version or patch
-Soon it will be relased a newer patch to introduce new documentation files about how to create a docker production / development environment
+Soon it will be released a newer patch that introduces a complete documentation, configuration and multiple fixes on the docker & login implementations
+
+## Release 1.0.0:
+Updated cardinal scripts, with new functionalities:
+- ...
 
 ## Alpha 0.1.4:
 Updated cardinal scripts, with new functionalities:

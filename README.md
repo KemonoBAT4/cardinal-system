@@ -39,7 +39,7 @@ When you are done developing pls make a pull request [here](https://github.com/K
 A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
 
 ## Versions 🗄️
-Right now, Cardinal's version is `Alpha 0.1.4`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
+Right now, Cardinal's version is `Release 1.0.0`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
 [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
 
 ## Ideas & Suggestions 💡
