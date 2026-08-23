@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>{{ page.title }}</title>
+        <link rel="icon" type="image/x-icon" href="/_cardinal/icons/cardinal/favicon.ico">
+        <link rel="stylesheet" href="/_cardinal/styles/cardinal/index.css">
+        <link rel="stylesheet" href="/_cardinal/styles/cardinal/register.css">
+    </head>
+
+    <body>
+        <main class="register-page">
+            <section class="register-container">
+
+                <!-- Brand -->
+                <div class="register-brand">
+                    <div class="register-logo">
+                        <img src="/_cardinal/icons/cardinal/icon.png" alt="">
+                    </div>
+
+                    <div class="register-brand-text">
+                        <span class="register-app-name">{{ app_name }}</span>
+                        <span class="register-subtitle">Create your account</span>
+                    </div>
+
+                </div>
+
+                <!-- Register card -->
+                <div class="register-card">
+
+                    <div class="register-card-header">
+                        <h1>Create an account</h1>
+                        <p>Fill in the details below to get started.</p>
+                    </div>
+
+                    <form class  = "register-form" method = "POST" action = "">
+
+                        <!-- Name -->
+                        <div class="form-row">
+                            <div class="form-field">
+                                <label for="first_name">
+                                    First name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="first_name"
+                                    name="first_name"
+                                    placeholder="Your first name"
+                                    autocomplete="given-name"
+                                    required
+                                    autofocus
+                                >
+                            </div>
+
+
+                            <div class="form-field">
+
+                                <label for="last_name">
+                                    Last name
+                                </label>
+
+                                <input
+                                    type="text"
+                                    id="last_name"
+                                    name="last_name"
+                                    placeholder="Your last name"
+                                    autocomplete="family-name"
+                                    required
+                                >
+
+                            </div>
+
+                        </div>
+
+
+                        <!-- Username -->
+                        <div class="form-field">
+
+                            <label for="username">
+                                Username
+                            </label>
+
+                            <input
+                                type="text"
+                                id="username"
+                                name="username"
+                                placeholder="Choose a username"
+                                autocomplete="username"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Email -->
+                        <div class="form-field">
+
+                            <label for="email">
+                                Email
+                            </label>
+
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                autocomplete="email"
+                                required
+                            >
+
+                        </div>
+
+
+                        <!-- Password -->
+                        <div class="form-field">
+
+                            <label for="password">
+                                Password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Create a password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                            <span class="field-hint">
+                                Use at least 8 characters.
+                            </span>
+
+                        </div>
+
+
+                        <!-- Confirm password -->
+                        <div class="form-field">
+
+                            <label for="password_confirm">
+                                Confirm password
+                            </label>
+
+                            <input
+                                type="password"
+                                id="password_confirm"
+                                name="password_confirm"
+                                placeholder="Repeat your password"
+                                autocomplete="new-password"
+                                required
+                            >
+
+                        </div>
+
+
+                        {% if error %}
+                            <div class="register-error">
+                                {{ error }}
+                            </div>
+                        {% endif %}
+
+
+                        <!-- Terms -->
+                        <div class="terms-container">
+
+                            <label class="checkbox-container">
+
+                                <input
+                                    type="checkbox"
+                                    name="terms"
+                                    value="1"
+                                    required
+                                >
+
+                                <span class="checkmark"></span>
+
+                                <span>
+                                    I agree to the
+                                    <a href="{{ terms_url }}">
+                                        terms and conditions
+                                    </a>
+                                </span>
+
+                            </label>
+
+                        </div>
+
+
+                        <button
+                            type="submit"
+                            class="register-button"
+                        >
+                            Create account
+                        </button>
+
+                    </form>
+
+
+                    <!-- Login link -->
+                    <div class="login-link-container">
+
+                        <span>
+                            Already have an account?
+                        </span>
+
+                        <a href="{{ login_url }}">
+                            Sign in
+                        </a>
+
+                    </div>
+
+                </div>
+
+
+                <!-- Footer -->
+                <div class="register-footer">
+
+                    <span>
+                        Powered by Cardinal
+                    </span>
+
+                    <span class="register-version">
+                        {{ cardinal_version }}
+                    </span>
+
+                </div>
+
+            </section>
+
+        </main>
+
+        <script src="/_cardinal/scripts/cardinal/register.js"></script>
+    </body>
+</html>
