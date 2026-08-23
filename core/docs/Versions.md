@@ -6,6 +6,7 @@ Soon it will be relased a newer patch to introduce new documentation files about
 Updated cardinal scripts, with new functionalities:
 - implemented docker with a `development` and `production` environment
 - all commands are available in the ./run.sh file explanation
+- implemented first release for `login`, `register` and `logout` interactions
 
 ## Alpha 0.1.3:
 Updated cardinal scripts, with new functionalities:

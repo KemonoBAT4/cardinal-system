@@ -22,4 +22,6 @@ To deactivate the Virtual Env:
 - `deactivate`
 
 ## Using Docker
-- There is currently not a docker configuration yet.
+Using any command in the `./run.sh` will use docker to run the application,
+with the `server` + `database` running on different docker containers.
+The only requirements is to have `Docker` installed and running on your system
