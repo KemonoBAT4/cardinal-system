@@ -32,7 +32,7 @@ def home():
 @routes.route("/dashboard/movie/list", methods=['GET'])
 def movie_list():
 
-    page = Page(title="Lista Film")
+    page = Page(page_title = "Movie Catalog", title="Lista Film")
     card = Card("Lista di tutti i Film")
 
     movie_list_section = Section(title = "Lista di tutti i Film Presenti").table(
