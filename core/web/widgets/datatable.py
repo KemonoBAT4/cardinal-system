@@ -20,7 +20,7 @@ from ._common import *
 
 """
 
-class CardinalDataTable:
+class CardinalDataTable(CardinalBaseWidget):
 
     _url       : str | None          = None
     _dataframe : pd.DataFrame | None = None
@@ -433,7 +433,7 @@ class CardinalDataTable:
     #endregion ----- METHODS -------- #
 
 
-    def __cardinal__(self) -> "str":
+    def render(self) -> "str":
         """
         #### DESCRIPTION:
         Renders the data table
@@ -455,5 +455,5 @@ class CardinalDataTable:
         # #endif
 
         return template
-    # #enddef __cardinal__
+    # #enddef render
 # #endclass CardinalDataTable

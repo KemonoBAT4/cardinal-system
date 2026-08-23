@@ -8,3 +8,9 @@ import json
 
 # core imports
 from core import configs
+
+class CardinalBaseWidget:
+    def render(self) -> str:
+        raise NotImplementedError
+    # #enddef render
+# #endclass

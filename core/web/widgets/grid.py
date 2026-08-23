@@ -4,7 +4,7 @@ from ._common import *
 # NOTE: this class is not yet implemented
 # TODO: implement this class
 # the class should create a grid of items
-class CardinalGrid:
+class CardinalGrid(CardinalBaseWidget):
 
     _items_list: "list[dict[str, str | typing.Any ]]"
 
@@ -98,7 +98,7 @@ class CardinalGrid:
     #endregion ----- PROPERTIES -------- #
 
 
-    def __cardinal__(self) -> "str":
+    def render(self) -> "str":
         """
         #### DESCRIPTION:
         Renders the grid
@@ -110,5 +110,5 @@ class CardinalGrid:
         - str
         """
         return ""
-    # #enddef __cardinal__
+    # #enddef render
 # #endclass CardinalGrid
