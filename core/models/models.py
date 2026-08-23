@@ -5,11 +5,35 @@ class User(UserMixin, BaseModel):
 
     __tablename__ = "users"
 
-    name            = db.Column(db.String(80) , nullable=False )
-    surname         = db.Column(db.String(80) , nullable=False )
+    name            = db.Column(db.String(80) , nullable=True )
+    surname         = db.Column(db.String(80) , nullable=True )
     username        = db.Column(db.String(80) , nullable=False, unique=True )
     email           = db.Column(db.String(120), nullable=False, unique=True )
     hashed_password = db.Column(db.LargeBinary, nullable=False )
+
+    @property
+    def title(self) -> str:
+        """
+        #### DESCRIPTION:
+        Returns the title of the user.
+
+        #### PARAMETERS:
+        - no parameters required
+
+        #### RETURN:
+        - str: The title of the user.
+        """
+
+        result: str = ""
+
+        if (self.name is not None) and (self.surname is not None):
+            result = " - ".join([self.surname, self.name])
+        else:
+            result = self.username
+        # #endif
+
+        return result
+    # #enddef title
 
     @classmethod
     def register(cls, username: str, email: str, name: str, surname: str, password: str) -> "User | tuple":
@@ -18,6 +42,7 @@ class User(UserMixin, BaseModel):
         Adds a new user with the provided password.
 
         #### PARAMETERS:
+        - username (str): The username of the user.
         - email (str): The email address of the user.
         - name (str): The name of the user.
         - surname (str): The surname of the user.
@@ -72,9 +97,11 @@ class User(UserMixin, BaseModel):
         return user
     #enddef
 
-    def get_id(self):
-        return str(self.uname)
-    # #enddef
+    # NOTE: [IMPORTANT] method required for flask-login to work properly
+    # binded with load_user method in core/system/startup.py
+    def get_id(self) -> int:
+        return self.id
+    # #enddef get_id
 
     def save(self) -> tuple:
 
