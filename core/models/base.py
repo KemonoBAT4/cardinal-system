@@ -9,7 +9,6 @@ import typing
 import datetime
 from enum import Enum
 
-from core.handlers import get_class_repr
 from core.configs import generate_uuid
 
 db = SQLAlchemy()
@@ -53,7 +52,7 @@ class BaseModel(db.Model):
         # #enddef result
 
         def __repr__(self) -> str:
-            return get_class_repr( classobject = self.__class__, description = "None" )
+            return f"<{self.__class__.__name__} None>" # get_class_repr( classobject = self.__class__, description = "None" )
         # #enddef __repr__
     # #endclass Result
 
