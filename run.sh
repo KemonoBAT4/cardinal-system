@@ -93,3 +93,7 @@ fi
 
 docker compose -f "$COMPOSE_DEV" exec "$APP_NAME" \
   python run.py "$APP_NAME" "$COMMAND"
+
+
+# TODO: commands to handle
+# [CREATE NEW APP] ./run.sh cardinal new application <application_name>
