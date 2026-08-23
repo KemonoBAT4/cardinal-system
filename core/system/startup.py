@@ -8,14 +8,17 @@ from flask_login import LoginManager, UserMixin, login_user, login_required, log
 from flask_bcrypt import Bcrypt                                                                                     # type: ignore
 from flask_mail import Mail, Message                                                                                # type: ignore
 from flask import current_app                                                                                       # type: ignore
+from flask_jwt_extended import JWTManager                                                                           # type: ignore
 
 # other imports
 from pathlib import Path
+from dotenv import load_dotenv
 import configparser
 import os
 import importlib
 import secrets
 import typing
+import datetime
 
 # local imports
 from core.models.base import BaseModel, db
@@ -25,22 +28,23 @@ from core.handlers import *
 # web blueprint imports
 from core.web.routes import routes
 from core.web.api import api
-from core.web.users import users
+from core.web.users import auth
 from core.models.models import User
 
 class Cardinal:
 
     _config: "configparser.ConfigParser"
-    _name: "str | None" = None
+    _name  : "str"
 
-    _app: "Flask"
+    _app        :"Flask"
     _app_context: "typing.Any"
 
     _host: str = "0.0.0.0"
     _port: int = 23104
 
-    _secret: "str | None" = None
-    _mail: "Mail | None" = None
+    _secret     : "str        | None" = None
+    _mail       : "Mail       | None" = None
+    _jwt_manager: "JWTManager | None" = None
 
     def __init__(self, name: str = "cardinal"):
 
@@ -72,8 +76,11 @@ class Cardinal:
 
         if is_resetted:
             cli_module = importlib.import_module(f'app.{self._name}.cli')
-            application_setup_function = getattr(cli_module, 'setup')
-            application_setup_function()
+            application_setup_function = getattr(cli_module, 'setup', None)
+
+            if application_setup_function is not None:
+                application_setup_function()
+            # #endif
         # #endif
 
         return is_resetted
@@ -96,11 +103,14 @@ class Cardinal:
         self._port = port if port is not None else self._port
 
         if (self._name != "cardinal"):
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
-            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
+            # NOTE: [OLD] old implementation
+            # self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/{self._name}")
+            # self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/{self._name}/api/v{self._config.get('Cardinal', 'api')}")
+
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.routes').routes, f"/")
+            self._addBlueprint(importlib.import_module(f'app.{self._name}.api').api, f"/api/v{self._config.get('Cardinal', 'api')}")
         #endif
 
-        # print(self._app.url_map)
 
         welcome_text = f"""
 
@@ -272,6 +282,11 @@ class Cardinal:
     #region ######
 
     @property
+    def name(self) -> str:
+        return self._name
+    # #enddef name
+
+    @property
     def app(self) -> Flask:
         return self._app
     # #enddef app
@@ -330,6 +345,8 @@ class Cardinal:
             # static_folder=f"../../app/{self._name}/static" # TODO: later implementation needed
         )
 
+        load_dotenv()
+
         # gets the configuration
         self._setupApplicationConfig()
 
@@ -339,7 +356,7 @@ class Cardinal:
         login_manager = LoginManager()
 
         login_manager.init_app(self._app)
-        login_manager.login_view = "access.login" # type: ignore
+        login_manager.login_view = "auth.login" # type: ignore
 
         @login_manager.user_loader
         def load_user(user_id: int) -> "User | None":
@@ -362,26 +379,32 @@ class Cardinal:
 
         self._mail = Mail(self._app)
 
-        # csrf
-        self._app.config["SECRET_KEY"] = self._generateSecretKey()
+        self._app.config["SECRET_KEY"]               = os.getenv("JWT_SECRET_KEY")
+        self._app.config["JWT_SECRET_KEY"]           = os.getenv("JWT_SECRET_KEY")
+        self._app.config["JWT_ACCESS_TOKEN_EXPIRES"] = datetime.timedelta(days=1)
 
-        # app context & database
-        self._db = db
+        self._jwt_manager = JWTManager(self._app)
+
+        # app context
         self._app_context = self._app.app_context()
         self._app_context.push()
 
-        self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+        self._app.config['SQLALCHEMY_DATABASE_URI'] = configs.build_db_uri(self._config)
+        # self._app.config['SQLALCHEMY_DATABASE_URI'] = str(self._config.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI"))
+
+        # database
+        # db = SQLAlchemy(self._app)
+        self._db = db
         self._db.init_app(self._app)
 
         # gets the host and port
-
         self._host = str(self._config.get("Cardinal", "host"))
         self._port = int(self._config.get("Cardinal", "port"))
 
         # core blueprints setup for the application
-        self._addBlueprint(routes, "/")
-        self._addBlueprint(api, f"/api/v{self._config.get('Cardinal', 'api')}")
-        self._addBlueprint(users, "/access")
+        self._addBlueprint(routes, "/_cardinal")
+        self._addBlueprint(api, f"/_cardinal/api/v{self._config.get('Cardinal', 'api')}")
+        self._addBlueprint(auth, "/auth")
     # #enddef _initApplication
 
     def _generateSecretKey(self) -> str:
@@ -567,4 +590,4 @@ class Cardinal:
     def __repr__(self) -> str:
         return get_class_repr(classobject=self.__class__, description=self._config.get('Cardinal', 'version'))
     # #enddef __repr__
-#endclass
+# #endclass

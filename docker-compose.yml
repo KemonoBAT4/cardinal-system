@@ -1,1 +1,278 @@
-# TODO: make the docker compose for the modular application
+# ─────────────────────────────────────────────
+#  Cardinal – docker-compose.yml · DEV MODE
+# ─────────────────────────────────────────────
+
+services:
+
+  # ─────────────────────────────
+  # moviecatalog
+  # ─────────────────────────────
+  moviecatalog:
+    build:
+      context: .
+      args:
+        APP_NAME: moviecatalog
+
+    image: cardinal-moviecatalog
+    container_name: cardinal_moviecatalog
+
+    restart: unless-stopped
+
+    working_dir: /Cardinal
+
+    # container idle in dev
+    entrypoint: ""
+    command: tail -f /dev/null
+
+    volumes:
+      - .:/Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: moviecatalog
+
+      DB_HOST: db_moviecatalog
+      DB_PORT: 3306
+      DB_NAME: ${MOVIECATALOG_DB_NAME:-moviecatalog}
+      DB_USER: ${MOVIECATALOG_DB_USER:-cardinal}
+      DB_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${MOVIECATALOG_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${MOVIECATALOG_JWT_SECRET_KEY:-your-secret-key-change-in-production}
+
+    ports:
+      - "23105:23105"
+
+    depends_on:
+      db_moviecatalog:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+  # ─────────────────────────────
+  # moviecatalog DB
+  # ─────────────────────────────
+  db_moviecatalog:
+    image: mysql:8.0
+
+    container_name: cardinal_db_moviecatalog
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${MOVIECATALOG_DB_NAME:-moviecatalog}
+      MYSQL_USER: ${MOVIECATALOG_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${MOVIECATALOG_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MOVIECATALOG_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_moviecatalog_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "cardinal",
+          "--password=${MOVIECATALOG_DB_PASSWORD:-changeme}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+
+  # ─────────────────────────────
+  # midnight
+  # ─────────────────────────────
+  midnight:
+    build:
+      context: .
+      args:
+        APP_NAME: midnight
+
+    image: cardinal-midnight
+    container_name: cardinal_midnight
+
+    restart: unless-stopped
+
+    working_dir: /Cardinal
+
+    # container idle in dev
+    entrypoint: ""
+    command: tail -f /dev/null
+
+    volumes:
+      - .:/Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: midnight
+
+      DB_HOST: db_midnight
+      DB_PORT: 3306
+      DB_NAME: ${MIDNIGHT_DB_NAME:-midnight}
+      DB_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      DB_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${MIDNIGHT_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${MIDNIGHT_JWT_SECRET_KEY:-your-secret-key-change-in-production}
+
+    ports:
+      - "23106:23106"
+
+    depends_on:
+      db_midnight:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+
+  # ─────────────────────────────
+  # midnight DB
+  # ─────────────────────────────
+  db_midnight:
+    image: mysql:8.0
+
+    container_name: cardinal_db_midnight
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${MIDNIGHT_DB_NAME:-midnight}
+      MYSQL_USER: ${MIDNIGHT_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${MIDNIGHT_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${MIDNIGHT_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_midnight_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "cardinal",
+          "--password=${MIDNIGHT_DB_PASSWORD:-changeme}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+  # ─────────────────────────────
+  # cardinal
+  # ─────────────────────────────
+  cardinal:
+    build:
+      context: .
+      args:
+        APP_NAME: cardinal
+
+    image: cardinal-cardinal
+    container_name: cardinal_cardinal
+
+    restart: unless-stopped
+
+    working_dir: /Cardinal
+
+    # container idle in dev
+    entrypoint: ""
+    command: tail -f /dev/null
+
+    volumes:
+      - .:/Cardinal
+
+    environment:
+      PYTHONUNBUFFERED: 1
+      APP_NAME: cardinal
+
+      DB_HOST: db_cardinal
+      DB_PORT: 3306
+      DB_NAME: ${CARDINAL_DB_NAME:-cardinal}
+      DB_USER: ${CARDINAL_DB_USER:-cardinal}
+      DB_PASSWORD: ${CARDINAL_DB_PASSWORD:-changeme}
+
+      SECRET_KEY: ${CARDINAL_SECRET_KEY:-changeme}
+      JWT_SECRET_KEY: ${CARDINAL_JWT_SECRET_KEY:-your-secret-key-change-in-production}
+
+    ports:
+      - "23104:23104"
+
+    depends_on:
+      db_cardinal:
+        condition: service_healthy
+
+    networks:
+      - cardinal_net
+
+  # ─────────────────────────────
+  # cardinal DB
+  # ─────────────────────────────
+  db_cardinal:
+    image: mysql:8.0
+
+    container_name: cardinal_db_core
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_DATABASE: ${CARDINAL_DB_NAME:-cardinal}
+      MYSQL_USER: ${CARDINAL_DB_USER:-cardinal}
+      MYSQL_PASSWORD: ${CARDINAL_DB_PASSWORD:-changeme}
+      MYSQL_ROOT_PASSWORD: ${CARDINAL_ROOT_PASSWORD:-rootchangeme}
+
+    volumes:
+      - db_cardinal_data:/var/lib/mysql
+
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "cardinal",
+          "--password=${CARDINAL_DB_PASSWORD:-changeme}"
+        ]
+
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - cardinal_net
+
+# ─────────────────────────────
+# volumes
+# ─────────────────────────────
+volumes:
+  db_moviecatalog_data:
+  db_midnight_data:
+  db_cardinal_data:
+
+
+# ─────────────────────────────
+# networks
+# ─────────────────────────────
+networks:
+  cardinal_net:
+    driver: bridge

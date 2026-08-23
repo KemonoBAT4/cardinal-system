@@ -16,12 +16,16 @@ In this first version of Cardinal the first way to start as development an appli
 
 - download the application with the command on a terminal `git clone https://github.com/KemonoBAT4/Cardinal`
 - enter the folder with `cd Cardinal`
-- create a python environment and activate it ( see how you can activate a virtual environment [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Environment.md) )
-- install all the dependencies with the command `pip install -r requirements.txt`
+- make sure to have the docker engine running
+
 - now its possible to run Cardinal, for a list of arguments possible run `python run.py help`
 - for a list of all the possible applications run the command `python run.py list`
 - for a simple setup of an application, before running it, do `python run.py <application name> setup`
 - now its possible to run the command `python run.py <application name> run`
+
+- enabled `./run.sh --help` for a listing all the commands
+<!-- - enabled the creation of a dedicated `docker-compose.yml` specific for every application -->
+
 
 <!--  (- install all the requirements with `pip install -r requirements.txt`) -->
 <!--  (- run cardinal with `python run.py`) -->
@@ -35,8 +39,18 @@ When you are done developing pls make a pull request [here](https://github.com/K
 A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
 
 ## Versions 🗄️
-Right now, Cardinal's version is `Alpha 0.1.3`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
+Right now, Cardinal's version is `Alpha 0.1.4`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
 [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
 
 ## Ideas & Suggestions 💡
 A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas).
+
+
+####### ---------------------------------------------------- #######
+
+CONCETTO:
+quando faccio il build e poi il deploy si deve creare una copia identica dell'applicazione, dove la parte di database in produzione è staccata da quella di sviluppo
+cosi si puo interagire con quella di sviluppo senza toccare l'applicazione in se, perchè poi lo scopo sarebbe di fare il build -> deploy e "inizializzare" il progetto
+facendo un setup dell'applicazione in produzione, cosi poi è possibile fare il run e farla partire normalmente
+
+####### ---------------------------------------------------- #######

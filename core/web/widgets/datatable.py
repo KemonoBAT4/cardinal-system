@@ -11,34 +11,34 @@ from ._common import *
 
 ### TO-DO LIST
 - [ ] get the data from the dataframe passed or retrieve it from the url
-- [ ] render the table with the config passed
+- [X] render the table with the config passed
 - [X] implement the buttons (download excel, pdf)
 - [ ] implement the possibility to pass the configuration from the api url request (if necessary)
-- [ ] implement the click event when a row is clicked
+- [X] implement the click event when a row is clicked
 - [X] implement the searchbar
 - [ ] clean the code
 
 """
 
-class CardinalDataTable:
+class CardinalDataTable(CardinalBaseWidget):
 
-    _url: "str | None" = None
-    _dataframe: "pd.DataFrame | None" = None
+    _url       : str | None          = None
+    _dataframe : pd.DataFrame | None = None
 
-    _config: dict
-    _click: "str" # TODO: implement typing.Callable"
-    _buttons: "dict | None"
-    _searchbar: bool
+    _config    : dict[str, typing.Any]
+    _click     : str # TODO: implement typing.Callable"
+    _buttons   : dict | None
+    _searchbar : bool
 
     _uuid: str
 
     def __init__(
         self,
-        data_structure_or_url: "str | pd.DataFrame",
-        config: dict,
-        click: "str | typing.Callable | None" = None,
-        buttons: "dict | None" = None,
-        searchbar: bool = False
+        data_structure_or_url : str | pd.DataFrame                  ,
+        config                : dict[str, typing.Any]               ,
+        click                 : str | typing.Callable | None = None ,
+        buttons               : dict                  | None = None ,
+        searchbar             : bool                         = False,
     ) -> "None":
         """
         #### DESCRIPTION:
@@ -61,7 +61,9 @@ class CardinalDataTable:
         elif isinstance(data_structure_or_url, pd.DataFrame):
             self._dataframe = data_structure_or_url
         else:
-            raise configs.CardinalException(message = f"Data structure must be a type of {type(str)} or {type(pd.DataFrame)}, not {type(_data_structure_or_url)}")
+            raise configs.CardinalException(
+                message = f"Data structure must be a type of {type(str)} or {type(pd.DataFrame)}, not {type(_data_structure_or_url)}"
+            )
         # #endif
 
         self._config    = config
@@ -69,6 +71,7 @@ class CardinalDataTable:
         self._buttons   = buttons
         self._searchbar = searchbar
     # #enddef __init__
+
 
     #region -------- PROPERTIES -------- #
 
@@ -136,9 +139,8 @@ class CardinalDataTable:
 
     def _get_template_from_url(self, url: str, column_keys: list[dict[str, str]]) -> "str":
 
-        header_text: str = ""
-
-        columns: dict = self._config.get("columns",  {})
+        header_text : str  = ""
+        columns     : dict = self._config.get("columns",  {})
 
         for key, value in columns.items():
             header_text += f"<th>{value.get('title', 'Undefined Title')}</th>"
@@ -400,11 +402,21 @@ class CardinalDataTable:
                             }
                         },
                         rowCallback: function(row, data) {
-                            $(row).css('cursor', 'pointer');
-                            $(row).on('click', function() {
-                                let redirect_url = '""" + self._click.replace("{id}", "' + data.id + '") + """';
-                                window.location.href = redirect_url;
-                            });
+                            $(row).css("cursor", "pointer");
+                            $(row).on("click", function() {
+                                let redirect_url = '""" + self._click + """';
+
+                                // if the redirect url is not empty
+                                if (redirect_url.trim().length !== 0) {
+
+                                    // regex replaces {key} with data[key]
+                                    redirect_url = redirect_url.replace(/{([^}]+)}/g, function(match, key) {
+                                        return data[key] !== undefined ? data[key] : match;
+                                    });
+
+                                    window.location.href = redirect_url;
+                                }
+                            })
                         }
                     });
                 });
@@ -420,7 +432,8 @@ class CardinalDataTable:
 
     #endregion ----- METHODS -------- #
 
-    def __cardinal__(self) -> "str":
+
+    def render(self) -> "str":
         """
         #### DESCRIPTION:
         Renders the data table
@@ -442,5 +455,5 @@ class CardinalDataTable:
         # #endif
 
         return template
-    # #enddef __cardinal__
+    # #enddef render
 # #endclass CardinalDataTable

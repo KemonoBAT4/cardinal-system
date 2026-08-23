@@ -1,9 +1,14 @@
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import UserMixin
+
+from sqlalchemy import ForeignKey, or_
+from sqlalchemy.orm import backref, relationship
 
 import bcrypt
 import typing
+import datetime
+from enum import Enum
 
-from core.handlers import get_class_repr
 from core.configs import generate_uuid
 
 db = SQLAlchemy()
@@ -47,7 +52,7 @@ class BaseModel(db.Model):
         # #enddef result
 
         def __repr__(self) -> str:
-            return get_class_repr( classobject = self.__class__, description = "None" )
+            return f"<{self.__class__.__name__} None>" # get_class_repr( classobject = self.__class__, description = "None" )
         # #enddef __repr__
     # #endclass Result
 
@@ -181,9 +186,17 @@ class BaseModel(db.Model):
 
         for key, value in vars(self).items():
             if not callable(getattr(self, key)) and not key.startswith('_'):
-                result[key] = value
+
+                if (isinstance(value, datetime.datetime) or isinstance(value, datetime.date)):
+                    result[key] = value.isoformat()
+                elif (isinstance(value, Enum)):
+                    result[key] = value.value
+                else:
+                    result[key] = value
+                # #endif
             # #endif
         # #endfor
+
 
         return result
     # #enddef to_dict
@@ -192,80 +205,3 @@ class BaseModel(db.Model):
         return f"<{self.__class__.__name__} {self.id}>"
     # #enddef
 # #endclass BaseModel
-
-class BaseUser(BaseModel):
-
-    __abstract__ = True
-
-    name          = db.Column(db.String(80), nullable=False)
-    surname       = db.Column(db.String(80), nullable=False)
-    username      = db.Column(db.String(80), unique=True, nullable=False)
-    email         = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.LargeBinary, nullable=False)
-
-    @classmethod
-    def register(cls, email: str, username: str, name: str, surname: str, password: str):
-        """
-        #### DESCRIPTION:
-        Adds a new user with the provided password.
-
-        #### PARAMETERS:
-        - password (str): The password to set for the user.
-
-        #### RETURN:
-        - tuple: A tuple containing the status and message of the operation.
-        """
-
-        found_user = cls.query.filter(cls.email == email).first()
-
-        if found_user is not None:
-            return cls.Result(False, "User already exists").result()
-        
-        # #endif
-
-
-
-
-        # TODO: implement this function
-        return None, "Not implemented yet"
-
-        # generate salt
-        salt = bcrypt.gensalt()
-
-        # hash password
-        hashed_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-
-        return self.save()
-    #enddef
-
-    @classmethod
-    def login(cls, email: str, password: str):
-
-        # TODO: implement this function
-        return None, "Not implemented yet"
-
-        user = cls.query.filter(cls.email == email).first()
-
-
-        return bcrypt.checkpw(password.encode("utf-8"), user.password_hash)
-    #enddef
-
-    # TODO: complete implementation
-    def save(self) -> tuple:
-
-        if (self.password_hash == None):
-            # FIXME: finish
-            self.password_hash = bcrypt.hashpw(self.password.encode('utf-8'), bcrypt.gensalt()) # type: ignore
-        #endif
-
-        response = self.Result(True, "Object saved successfully")
-
-        # NOTE: remove this lines of code once the function is implemented
-        response.status = False
-        response.message = "Not implemented yet"
-
-        super().save()
-
-        return response.result()
-    # #enddef save
-#endclass

@@ -47,7 +47,7 @@ class Action:
             action=self
         )
     # #enddef render
-# #endclass
+# #endclass Action
 
 class Section:
 
@@ -63,7 +63,7 @@ class Section:
 
     def __init__(
         self,
-        title: str = "",
+        title   : str = "",
         subtitle: str = "",
     ) -> "None":
         self.title = title
@@ -82,7 +82,6 @@ class Section:
     ) -> "Section":
 
         self._type = SectionTypeEnum.TABLE
-        # self.template = "sections/table.html"
         self.context = { "url": url }
 
         self.template = CardinalDataTable(
@@ -90,7 +89,7 @@ class Section:
             config  = config,
             click   = click,
             buttons = buttons
-        ).__cardinal__()
+        ).render()
 
         return self
     # #enddef table
@@ -140,7 +139,7 @@ class Section:
             section=self
         )
     # #enddef render
-# #endclass
+# #endclass Section
 
 class Card:
 
@@ -198,17 +197,18 @@ class Card:
             card=self
         )
     # #enddef render
-# #endclass
+# #endclass Card
 
 class Page:
 
     # all the cards of the page
-    cards: list[Card]
+    renderable_objects_list: list[Card | Section | CardinalBaseWidget]
 
     # page title
     title: str
     page_title: str
     subtitle: str
+    app_name: str
 
     # template items
     template: str
@@ -219,24 +219,32 @@ class Page:
 
     def __init__(
         self,
-        page_title: str = "",
-        title: str = "",
-        subtitle: str = "",
+        page_title : str = "",
+        title      : str = "",
+        subtitle   : str = "",
 
-        _icon: typing.Any = "/icons/cardinal/favicon.ico",
+        _app_name  : str | None = None,
+        _icon      : typing.Any = "/_cardinal/icons/cardinal/favicon.ico"
     ) -> "None":
 
         self.page_title = page_title
         self.title = title
         self.subtitle = subtitle
 
-        self.cards = []
+        self.renderable_objects_list = []
+
+        if isinstance(_app_name, str):
+            self.app_name = _app_name
+        else:
+            self.app_name = system.cardinal.config.get("Cardinal", "name").title()
+        # #endif
+
         self.icon = _icon
     # #enddef __init__
 
     def addCard(self, card: Card):
         if isinstance(card, Card):
-            self.cards.append(card)
+            self.renderable_objects_list.append(card)
         else:
             raise TypeError("card must be an instance of Card")
         # #endif
@@ -255,9 +263,15 @@ class Page:
     def _get_menu_items(self):
         menu_items = []
 
-        with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
-            menu_items = json.load(f)
-        # #enddef
+        if str(system.cardinal._name).lower() == "cardinal":
+            with open(F'{ROOT_PATH}/core/web/menu.json') as f:
+                menu_items = json.load(f)
+            # #endwith
+        else:
+            with open(f'{ROOT_PATH}/app/{system.cardinal._name}/menu.json') as f:
+                menu_items = json.load(f)
+            # #endwith
+        # #endif
 
         return menu_items
     # #enddef _get_menu_items
@@ -265,10 +279,48 @@ class Page:
     def render(self):
         return render_template(
             "index.html",
-            page = self,
-            logged_user = logged_user(),
+            app_name         = self.app_name,
+            page             = self,
+            logged_user      = logged_user().title if isinstance(logged_user(), User) else logged_user(),
             cardinal_version = config.get("Cardinal", "version"),
-            menu_items = self._get_menu_items()
+            menu_items       = self._get_menu_items()
         )
     # #enddef render
-# #endclass
+# #endclass page
+
+class AuthPage:
+
+    page_title: str
+    app_name: str
+
+    template: str
+
+    def __init__(
+        self,
+        page_title : str        = ""                                     ,
+        template   : str        = "login.html"                           ,
+        _app_name  : str | None = None                                   ,
+        _icon      : typing.Any = "/_cardinal/icons/cardinal/favicon.ico",
+    ) -> "None":
+
+        self.page_title = page_title
+        self.template   = template
+
+        if isinstance(_app_name, str):
+            self.app_name = _app_name
+        else:
+            self.app_name = system.cardinal.config.get("Cardinal", "name").title()
+        # #endif
+
+        self.icon = _icon
+    # #enddef __init__
+
+    def render(self):
+        return render_template(
+            self.template,
+            app_name         = self.app_name,
+            page             = self,
+            cardinal_version = config.get("Cardinal", "version"),
+        )
+    # #enddef render
+# #endclass AuthPage

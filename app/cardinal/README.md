@@ -1,7 +1,6 @@
 
-# Movie Catalog
-The Movie Catalog is a library created for display a complete catalog of **films**, **TV series** & **more**, with the possibility to create specific lists (favourites, etc ...) with also a intern player for the downloaded films / videos ( **not the possibility to download films for legal reasons** )
-
+# Cardinal Core
+The Cardinal Core is program created for enabling the creation / edit of new application
 
 ## 1.  📌 Getting Started
 Commands to run the server in dev mode. For more commands, parameters and specific behaviour, see the specific files for more accurate infos.
@@ -19,12 +18,4 @@ Commands to run the server in dev mode. For more commands, parameters and specif
 
 
 ## 2. 🏗️ Deploy The Project
-Follow these steps to make a deploy folder for this project:
-
-1. First run this command to create the compiled folder.
-    - **`./run.sh <project_name> build`**
-
-this will create a .tar folder which is the image
-
-2. For running the compiled instance the following command
-    - **`docker run cardinal-<project_name> <project_name> <command>`**
+These Project cannot be deployed since its a developer ONLY feature

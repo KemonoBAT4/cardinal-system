@@ -22,5 +22,20 @@ from enum import Enum
 project_name: str = os.path.dirname(os.path.abspath(__file__))
 
 
-# "D:\documents\projects\moviecatalog"
-MEDIA_FOLDER: str = cardinal.config.get("Cardinal Custom", "MEDIA_FOLDER", fallback="/")
+################
+# ENUMERATIVES #
+#region ########
+
+class TaskStatus(Enum):
+    OPEN        = "open"
+    IN_PROGRESS = "in_progress"
+    CLOSED      = "closed"
+    CANCELLED   = "cancelled"
+# #endclass TaskStatus
+
+class NoteStatus(Enum):
+    OPEN    = "open"
+    CLOSED  = "closed"
+# #endclass NoteStatus
+
+#endregion #####

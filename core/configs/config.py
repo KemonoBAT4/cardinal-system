@@ -1,4 +1,3 @@
-
 # imports
 import os
 import configparser
@@ -6,16 +5,14 @@ import sys
 import typing
 import uuid
 
-
 #################
 # CONFIGURATION #
 #region #########
-
 config = configparser.ConfigParser()
 
 args: list  = sys.argv.copy()
-runner: str = args.pop(0) # run.py
-name: str   = args.pop(0) # name
+runner: str = args.pop(0) if len(args) > 0 else "run.py" # run.py
+name: str   = args.pop(0) if len(args) > 0 else "cardinal" # name
 
 ROOT_PATH: str = os.path.join((os.path.dirname(os.path.abspath(__file__))), "..", "..")
 
@@ -25,9 +22,33 @@ def generate_uuid() -> str:
     return uuid.uuid4().hex
 # #enddef generate_uuid
 
-def get_cardinal_text(cardinal: "Cardinal") -> str:
-    return f"""
+def build_db_uri(cfg: configparser.ConfigParser) -> str:
+    """
+    #### DESCRIPTION:
+    Returns the database URI based on the configuration (tries to get the env vars first).
 
+    #### PARAMETERS:
+    - cfg: configparser.ConfigParser -> the configuration parser
+
+    #### RETURN:
+    - str : the database URI
+    """
+
+    db_host = os.environ.get("DB_HOST")
+    db_port = os.environ.get("DB_PORT", "3306")
+    db_name = os.environ.get("DB_NAME")
+    db_user = os.environ.get("DB_USER")
+    db_pass = os.environ.get("DB_PASSWORD")
+
+    if all([db_host, db_name, db_user, db_pass]):
+        return f"mysql+pymysql://{db_user}:{db_pass}@{db_host}:{db_port}/{db_name}"
+    # #endif
+
+    return cfg.get("Cardinal Database", "SQLALCHEMY_DATABASE_URI")
+# #enddef build_db_uri
+
+def get_cardinal_text(cardinal: "Cardinal") -> str: # type: ignore
+    return f"""
     #######################
     # WELCOME TO CARDINAL #
     #######################
@@ -44,13 +65,11 @@ def get_cardinal_text(cardinal: "Cardinal") -> str:
     - port: {cardinal._port}
 
     # --- DATABASE INFORMATIONS --- #
-    - current database path: {cardinal._config.get('Cardinal Database', 'SQLALCHEMY_DATABASE_URI')}
+    - current database path: {build_db_uri(cardinal._config)}
 
     # --- SYSTEM DEFAULT PATHS --- #
     - cardinal dashboard base path: '/cardinal'
-    - cardinal authentication base path: '/access'
-
+    - cardinal authentication base path: '/auth'
     """
 # #enddef get_cardinal_text
-
 #endregion ######

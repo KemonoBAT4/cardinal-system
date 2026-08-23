@@ -1,5 +1,6 @@
 # other imports
 import os
+from pathlib import Path
 
 # flask imports
 from flask import Blueprint, redirect, url_for
@@ -26,7 +27,6 @@ def index():
 @routes.route("/home", methods=['GET'])
 @login_required
 def home():
-    current_version = config.get("Cardinal", "version")
     page_title = "The Cardinal System"
     title = "Cardinal: Home"
 
@@ -36,16 +36,22 @@ def home():
 
     page.addCard(card)
     return page.render()
-#enddef
+#enddef home
 
-@routes.route("/data")
-def get_data():
-    data = [
-        {"id": 1, "nome": "Mario", "eta": 30, "citta": "Roma"},
-        {"id": 2, "nome": "Luigi", "eta": 28, "citta": "Milano"},
-        {"id": 3, "nome": "Anna", "eta": 35, "citta": "Torino"},
-    ]
-    return jsonify(data)
+@routes.route("/settings", methods=['GET', 'POST'])
+@login_required
+def settings():
+    pass
+    return ""
+#enddef settings
+
+@routes.route("/application/status", methods=['GET'])
+@login_required
+def status():
+    pass
+    return ""
+#enddef status
+
 ##################
 # ABOUT CARDINAL #
 #region ##########
@@ -59,7 +65,7 @@ def about():
     page = Page(page_title=page_title, title=title)
 
     return page.render()
-#enddef
+#enddef about
 
 #endregion #######
 
