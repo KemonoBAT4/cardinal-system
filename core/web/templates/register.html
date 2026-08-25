@@ -10,6 +10,8 @@
     </head>
 
     <body>
+        <div id="toast-container" class="toast-container"></div>
+
         <main class="register-page">
             <section class="register-container">
 
@@ -28,7 +30,6 @@
 
                 <!-- Register card -->
                 <div class="register-card">
-
                     <div class="register-card-header">
                         <h1>Create an account</h1>
                         <p>Fill in the details below to get started.</p>
@@ -56,7 +57,6 @@
 
 
                             <div class="form-field">
-
                                 <label for="last_name">
                                     Last name
                                 </label>
@@ -69,15 +69,11 @@
                                     autocomplete="family-name"
                                     required
                                 >
-
                             </div>
-
                         </div>
-
 
                         <!-- Username -->
                         <div class="form-field">
-
                             <label for="username">
                                 Username
                             </label>
@@ -90,13 +86,10 @@
                                 autocomplete="username"
                                 required
                             >
-
                         </div>
-
 
                         <!-- Email -->
                         <div class="form-field">
-
                             <label for="email">
                                 Email
                             </label>
@@ -109,13 +102,10 @@
                                 autocomplete="email"
                                 required
                             >
-
                         </div>
-
 
                         <!-- Password -->
                         <div class="form-field">
-
                             <label for="password">
                                 Password
                             </label>
@@ -132,13 +122,10 @@
                             <span class="field-hint">
                                 Use at least 8 characters.
                             </span>
-
                         </div>
-
 
                         <!-- Confirm password -->
                         <div class="form-field">
-
                             <label for="password_confirm">
                                 Confirm password
                             </label>
@@ -151,9 +138,7 @@
                                 autocomplete="new-password"
                                 required
                             >
-
                         </div>
-
 
                         {% if error %}
                             <div class="register-error">
@@ -161,12 +146,9 @@
                             </div>
                         {% endif %}
 
-
                         <!-- Terms -->
                         <div class="terms-container">
-
                             <label class="checkbox-container">
-
                                 <input
                                     type="checkbox"
                                     name="terms"
@@ -182,25 +164,16 @@
                                         terms and conditions
                                     </a>
                                 </span>
-
                             </label>
-
                         </div>
 
-
-                        <button
-                            type="submit"
-                            class="register-button"
-                        >
+                        <button type="submit" class="register-button">
                             Create account
                         </button>
-
                     </form>
-
 
                     <!-- Login link -->
                     <div class="login-link-container">
-
                         <span>
                             Already have an account?
                         </span>
@@ -208,15 +181,11 @@
                         <a href="{{ login_url }}">
                             Sign in
                         </a>
-
                     </div>
-
                 </div>
-
 
                 <!-- Footer -->
                 <div class="register-footer">
-
                     <span>
                         Powered by Cardinal
                     </span>
@@ -224,11 +193,8 @@
                     <span class="register-version">
                         {{ cardinal_version }}
                     </span>
-
                 </div>
-
             </section>
-
         </main>
 
         <script src="/_cardinal/scripts/cardinal/register.js"></script>
