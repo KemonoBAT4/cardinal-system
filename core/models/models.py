@@ -25,12 +25,13 @@ class User(UserMixin, BaseModel):
         """
 
         result: str = ""
+        result = self.username
 
-        if (self.name is not None) and (self.surname is not None):
-            result = " - ".join([self.surname, self.name])
-        else:
-            result = self.username
-        # #endif
+        # if (self.name is not None) and (self.surname is not None):
+        #     result = " - ".join([self.surname, self.name])
+        # else:
+        #     result = self.username
+        # # #endif
 
         return result
     # #enddef title
@@ -77,7 +78,7 @@ class User(UserMixin, BaseModel):
         user.save()
 
         return user
-    #enddef
+    #enddef register
 
     @classmethod
     def login(cls, username: str, password: str) -> "User | tuple":
@@ -95,7 +96,7 @@ class User(UserMixin, BaseModel):
             return cls.Result(False, "Invalid password").result()
         # #endif
         return user
-    #enddef
+    #enddef login
 
     # NOTE: [IMPORTANT] method required for flask-login to work properly
     # binded with load_user method in core/system/startup.py
