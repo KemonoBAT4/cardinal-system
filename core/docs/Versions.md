@@ -4,7 +4,7 @@ Soon it will be released a newer patch that introduces a complete documentation,
 
 ## Release 1.0.0:
 Updated cardinal scripts, with new functionalities:
-- ...
+- new features for the login & register: now properly responds with an error with the action was not completed
 
 ## Alpha 0.1.4:
 Updated cardinal scripts, with new functionalities:
