@@ -5,6 +5,8 @@ Soon it will be released a newer patch that introduces a complete documentation,
 ## Release 1.0.0:
 Updated cardinal scripts, with new functionalities:
 - new features for the login & register: now properly responds with an error with the action was not completed
+- new features for the docker interaciton: now properly stops the container before executing any action (reset or setup)
+- new commands for docker: now `./run.sh <project_name> stop` launches a command to stop both the applicaiton and DB containers
 
 ## Alpha 0.1.4:
 Updated cardinal scripts, with new functionalities:
