@@ -10,10 +10,11 @@
 #
 #  Usage:
 #    ./run.sh <app> run         → start in DEV mode
-#    ./run.sh <app> setup       → setup DB
+#    ./run.sh <app> stop        → stop the app and DB containers
+#    ./run.sh <app> reset       → destroys the DB and rebuilds it
+#    ./run.sh <app> setup       → setup DB and executes the "setup" function
 #    ./run.sh <app> build       → creates an image for PROD baked mode
 #    ./run.sh <app> deploy      → starts the app in PROD (standalone)
-#    ./run.sh <app> reset       → destroys the DB and rebuilds it
 # ─────────────────────────────────────────────────────────────
 
 # NOTE: remove this
@@ -49,10 +50,16 @@ CONTAINER="cardinal_${APP_NAME}"
 DB_SERVICE="db_${APP_NAME}"
 
 if [ "$COMMAND" == "reset" ]; then
+  docker compose -f "$COMPOSE_DEV" stop "$APP_NAME" "$DB_SERVICE"
   echo "- Resetting DB volumes for app $APP_NAME..."
   docker compose -f "$COMPOSE_DEV" down -v "$APP_NAME" "$DB_SERVICE"
   docker compose -f "$COMPOSE_DEV" up -d "$APP_NAME" "$DB_SERVICE"
   echo "-- Reset completed."
+  exit 0
+fi
+
+if [ "$COMMAND" == "stop" ]; then
+  docker compose -f "$COMPOSE_DEV" stop "$APP_NAME" "$DB_SERVICE"
   exit 0
 fi
 
@@ -86,12 +93,17 @@ until docker ps --filter "name=^${CONTAINER}$" --filter "status=running" \
   sleep 1
 done
 
-if ["$COMMAND" == "setup"]; then
+if [ "$COMMAND" == "setup" ]; then
+  docker compose -f "$COMPOSE_DEV" stop "$APP_NAME" "$DB_SERVICE"
   docker compose -f "$COMPOSE_DEV" exec "$APP_NAME" \
     pip install -r --no-cache-dir requirements.txt
 fi
 
-docker compose -f "$COMPOSE_DEV" exec "$APP_NAME" \
+# print compose dev name
+echo "- Starting $APP_NAME..."
+echo "what is $COMPOSE_DEV"
+
+docker compose -f "$COMPOSE_DEV" exec -it "$APP_NAME" \
   python run.py "$APP_NAME" "$COMMAND"
 
 
