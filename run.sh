@@ -94,18 +94,13 @@ until docker ps --filter "name=^${CONTAINER}$" --filter "status=running" \
 done
 
 if [ "$COMMAND" == "setup" ]; then
-  docker compose -f "$COMPOSE_DEV" stop "$APP_NAME" "$DB_SERVICE"
+  # docker compose -f "$COMPOSE_DEV" stop "$APP_NAME" "$DB_SERVICE"
   docker compose -f "$COMPOSE_DEV" exec "$APP_NAME" \
-    pip install -r --no-cache-dir requirements.txt
+    pip install -r requirements.txt
 fi
-
-# print compose dev name
-echo "- Starting $APP_NAME..."
-echo "what is $COMPOSE_DEV"
 
 docker compose -f "$COMPOSE_DEV" exec -it "$APP_NAME" \
   python run.py "$APP_NAME" "$COMMAND"
-
 
 # TODO: commands to handle
 # [CREATE NEW APP] ./run.sh cardinal new application <application_name>
