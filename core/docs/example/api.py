@@ -1,11 +1,17 @@
 
-from flask import Blueprint
-from .handlers import *
+# local imports
+from ._common import *
+from .models import *
 
-api = Blueprint('example_api', __name__)
+api = Blueprint(f'{project_name}_api', __name__)
 
-@api.route('/exmaple')
-def apiTest():
+@api.route("/example", methods=['GET', 'POST'])
+def example_api():
+    result: dict = {
+        "status": True,
+        "message": "example api endpoint"
+    }
 
-    return {"exmaple": "example"}
-#enddef
+    return jsonify(result), 200
+# #enddef example_api
+

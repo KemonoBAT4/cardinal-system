@@ -1,8 +1,4 @@
 
-# local imports TODO: review, probably circual import
-from .models import *
-from .forms import *
+from ._common import *
 
-def exmaple_function():
-    pass
-#enddef
+# handlers functions
