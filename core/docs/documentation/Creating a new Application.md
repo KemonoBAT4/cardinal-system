@@ -14,16 +14,20 @@ This method allows you to create a new application starting from a template and 
 
     - A good knowledge of SQLAlchemy queries is required. You should be familiar with concepts such as model declarations, database queries, and so on
 
+    - A good knowledge of DOcker is required. You should be familiar with concepts like images, containers, Dockerfile, docker-compose.yml, and so on
+
 - ##### `Steps:`
     - Go in the `core/docs/` and copy the `example/` folder
     - In the main filesystem go in the `app/` folder and paste the copied folder
     - Modifiy the files `routes` / `models` / `handlers` / `apis` as you please
-
+    - Right now its not implemented yet a way to auto-generate a `dockcer-compose.yml`. when creating a new app you have to manually create the volumes for the app and the db in the `docker-compose.yml`
+    - After doing all of this there wil be the standard commands for running the application (viewvable in the `./run.sh` file description)
 #
 
 ## Methods Coming Soon:
+This methods to create a new applicaiton are not supported yet and will be added in future releases
 
-### Assisted creation:
+### Assisted creation: `[NOT SUPPORTED YET]`
 This method helps you create a new application from scratch by guiding you through a customizable and easy-to-use configuration process for the application. It is also more accessible and easier to integrate compared to the other options.
 - ##### `Requirements:`
     - there are no requirements needed to create a new application with this tool.

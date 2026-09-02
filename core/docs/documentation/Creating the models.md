@@ -1,4 +1,4 @@
-# Creating your json model
+# Creating your json model `[NOT SUPPORTED YET]`
 If you have familiarity with the json models you can create your models
 by creating the file `models.json` on your own.
 
