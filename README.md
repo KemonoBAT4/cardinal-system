@@ -8,49 +8,28 @@ Once its core features are completed, Cardinal will be, with some simple command
 ![Cardinal Example Dashboard](/core/docs/images/dashboard_example_v-a_0-1-2.png)
 
 ## How to install Cardinal 🖥️
-### Production Branch Installation
-There is currently not a production branch with a stable way to install & run Cardinal, since its still in development.
 
 ### Development Branch Installation
 In this first version of Cardinal the first way to start as development an application is the following:
 
-- download the application with the command on a terminal `git clone https://github.com/KemonoBAT4/Cardinal`
+- download the application with the command on a terminal `git clone https://github.com/KemonoBAT4/Cardinal-System`
 - enter the folder with `cd Cardinal`
 - make sure to have the docker engine running
 
-- now its possible to run Cardinal, for a list of arguments possible run `python run.py help`
-- for a list of all the possible applications run the command `python run.py list`
-- for a simple setup of an application, before running it, do `python run.py <application name> setup`
-- now its possible to run the command `python run.py <application name> run`
+- now its possible to run Cardinal, for a list of arguments possible run `./run.sh --help`
+- for a list of all the possible applications run the command `./run.sh app list`
+- for a simple setup of an application, before running it, do `./run.sh <application name> setup`
+- now its possible to run the command `./run.sh <application name> run`
 
-- enabled `./run.sh --help` for a listing all the commands
 <!-- - enabled the creation of a dedicated `docker-compose.yml` specific for every application -->
 
-
-<!--  (- install all the requirements with `pip install -r requirements.txt`) -->
-<!--  (- run cardinal with `python run.py`) -->
-<!--  (- visit the dashboard page `/cardinal/dashboard` to see the dashboard) -->
-
-## Contribute the project 📋
+<!-- ## Contribute the project 📋
 If you have access to this repository you are free to fork the dev branch to help the project.
-When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made. A complete guide on how to make a standard pull request can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Contributing.md).
-
-## Structure 📂
-A structure of the project can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Structure.md) with some details about the folder's utility.
+When you are done developing pls make a pull request [here](https://github.com/KemonoBAT4/Cardinal/pulls) providing a detailed description of all the changes you made. A complete guide on how to make a standard pull request can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Contributing.md). -->
 
 ## Versions 🗄️
-Right now, Cardinal's version is `Alpha 0.1.4`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
+Right now, Cardinal's version is `Release 1.0.0`, and wil be updated when there is a new important feature added or bugs fixed. More About Versions
 [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Versions.md).
 
 ## Ideas & Suggestions 💡
 A complete list of ideas that its currently in development / considered can be found [here](https://github.com/KemonoBAT4/Cardinal/blob/main/core/docs/Ideas.md) and in its related Issues (only for W.I.P. ideas).
-
-
-####### ---------------------------------------------------- #######
-
-CONCETTO:
-quando faccio il build e poi il deploy si deve creare una copia identica dell'applicazione, dove la parte di database in produzione è staccata da quella di sviluppo
-cosi si puo interagire con quella di sviluppo senza toccare l'applicazione in se, perchè poi lo scopo sarebbe di fare il build -> deploy e "inizializzare" il progetto
-facendo un setup dell'applicazione in produzione, cosi poi è possibile fare il run e farla partire normalmente
-
-####### ---------------------------------------------------- #######

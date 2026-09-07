@@ -28,88 +28,6 @@
     padding: 1rem;
 }
 
-.form-container {
-    display: flex;
-    flex-direction: column;
-    gap: .75rem;
-}
-
-.form-row {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    flex-wrap: wrap;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: .3rem;
-    flex: 1;
-    min-width: 160px;
-}
-
-.form-group label {
-    font-family: 'DM Sans', sans-serif;
-    font-size: .75rem;
-    font-weight: 600;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-}
-
-.form-group input,
-.form-group select,
-.form-group textarea {
-    padding: .45rem .75rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .85rem;
-    color: var(--text);
-    background: var(--bg);
-    outline: none;
-    transition: border-color .2s, box-shadow .2s;
-}
-
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-    background: var(--surface);
-}
-
-.form-submit {
-    display: flex;
-    flex-direction: row;
-    gap: .5rem;
-    padding-top: .25rem;
-}
-
-.form-submit button,
-.form-submit input[type="submit"] {
-    padding: .45rem 1.2rem;
-    border-radius: 6px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .15s, transform .1s;
-}
-
-.form-submit button:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-}
-
-.form-submit button:active {
-    transform: translateY(0);
-}
-
 .table-table-container {
     width: 99%;
     margin: 0 auto;
@@ -144,6 +62,46 @@ table.dataTable tbody tr:hover td { background: var(--accent-soft) !important; }
 table.dataTable tbody tr:last-child td { border-bottom: none !important; }
 
 
+/* =========================================================
+   FORM
+   ========================================================= */
+
+.form-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+
+/* ---------------------------------------------------------
+   GRID
+   --------------------------------------------------------- */
+
+.form-row {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+
+/* ---------------------------------------------------------
+   FORM GROUP
+   --------------------------------------------------------- */
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: .35rem;
+    min-width: 0;
+}
+
+
+/* ---------------------------------------------------------
+   LABEL
+   --------------------------------------------------------- */
+
 .form-label {
     font-family: 'DM Sans', sans-serif;
     font-size: .75rem;
@@ -154,67 +112,183 @@ table.dataTable tbody tr:last-child td { border-bottom: none !important; }
 }
 
 .form-input,
-.form-select {
+.form-select,
+.form-group textarea {
     width: 100%;
-    padding: .45rem .75rem;
+    min-height: 38px;
+    box-sizing: border-box;
+
+    padding: .55rem .75rem;
+
     border: 1px solid var(--border);
-    border-radius: 6px;
+    border-radius: 7px;
+
     font-family: 'DM Sans', sans-serif;
     font-size: .85rem;
+
     color: var(--text);
-    background: var(--bg);
+
+    background: #f1f5f9;
+
     outline: none;
-    transition: border-color .2s, box-shadow .2s;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease,
+        background-color .15s ease;
+}
+
+.form-group textarea {
+    width: 100%;
+    min-height: 100px;
+    resize: vertical;
+    box-sizing: border-box;
 }
 
 .form-input:focus,
-.form-select:focus {
+.form-select:focus,
+.form-group textarea:focus {
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(37,99,235,.12);
-    background: var(--surface);
+
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, .10);
+
+    background: #ffffff;
 }
 
-.form-submit-btn {
-    padding: .45rem 1.2rem;
-    border-radius: 6px;
-    border: none;
-    background: var(--accent);
-    color: #fff;
-    font-family: 'DM Sans', sans-serif;
-    font-size: .85rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: background .15s, transform .1s;
-}
-
-.form-submit-btn:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
-}
-
-.form-error {
-    font-size: .75rem;
-    color: #ef4444;
-    margin-top: .2rem;
+.form-input:hover,
+.form-select:hover,
+.form-group textarea:hover {
+    border-color: #cbd5e1;
 }
 
 .form-checkbox {
     display: flex;
     align-items: center;
-    gap: .5rem;
+
+    gap: .6rem;
+
+    min-height: 38px;
+
     cursor: pointer;
+
+    font-family: 'DM Sans', sans-serif;
     font-size: .85rem;
+
     color: var(--text);
+}
+
+.form-checkbox-input {
+    width: 17px;
+    height: 17px;
+
+    cursor: pointer;
+
+    accent-color: var(--accent);
+}
+
+.form-error {
+    font-family: 'DM Sans', sans-serif;
+
+    font-size: .72rem;
+    line-height: 1.3;
+
+    color: #ef4444;
+
+    margin-top: .1rem;
+}
+
+.form-submit {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: .75rem;
+
+    width: 100%;
+
+    padding-top: .5rem;
+
+    border-top: 1px solid var(--border);
+}
+
+.form-submit-btn {
+    width: 140px;
+    min-height: 42px;
+
+    padding: .6rem 1.25rem;
+
+    border-radius: 7px;
+    border: none;
+
+    font-family: 'DM Sans', sans-serif;
+    font-size: .85rem;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background-color .15s ease,
+        transform .1s ease,
+        box-shadow .15s ease;
+}
+
+.form-submit-btn.save {
+    background: #16a34a;
+    color: #fff;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
+}
+
+.form-submit-btn.save:hover {
+    background: #15803d;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12);
+}
+
+.form-submit-btn.save:active {
+    background: #166534;
+    transform: translateY(0);
 }
 
 .form-submit-btn.cancel {
-    background: transparent;
-    color: var(--text-muted);
-    border: 1px solid var(--border);
+    background: #dc2626;
+    color: #fff;
+
+    box-shadow: 0 1px 2px rgba(0, 0, 0, .08);
 }
 
 .form-submit-btn.cancel:hover {
-    background: var(--bg);
-    color: var(--text);
-    transform: none;
+    background: #b91c1c;
+
+    transform: translateY(-1px);
+
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .12);
+}
+
+.form-submit-btn.cancel:active {
+    background: #991b1b;
+    transform: translateY(0);
+}
+
+@media (max-width: 768px) {
+
+    .form-row {
+        grid-template-columns: 1fr;
+    }
+
+    .form-group {
+        grid-column: span 1 !important;
+    }
+
+    .form-submit {
+        justify-content: stretch;
+    }
+
+    .form-submit-btn {
+        flex: 1;
+        width: auto;
+    }
 }

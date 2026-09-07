@@ -26,22 +26,41 @@ def index():
 
 @auth.route("/login", methods=['GET', 'POST'])
 def login():
+    """
+    #### DESCRIPTION:
+    Page to log in the user
+    """
 
     if (request.method == 'POST'):
 
-        username: str = request.form.get("username", "")
-        password: str = request.form.get("password", "")
+        data: dict = request.get_json()
+
+        username: str = data.get("username", "")
+        password: str = data.get("password", "")
 
         user: User | tuple = User.login(
             username = username,
             password = password
         )
 
+        status  : bool = True
+        message : str  = "Successfully logged in"
+
         if isinstance(user, User):
             login_user(user)
+        else:
+            status  = False
+
+            if (user[1] == "Invalid password"):
+                message = "Password incorretta"
+            elif (user[1] == "User not found"):
+                message = "Utente non trovato"
+            else:
+                message = "Unknown error"
+            # #endif
         # #endif
 
-        return redirect(url_for("auth.me"))
+        return jsonify({"status": status, "message": message}), 200
     else:
         page: AuthPage = AuthPage(
             page_title = "",
@@ -54,14 +73,19 @@ def login():
 
 @auth.route("/register", methods=['GET', 'POST'])
 def register():
+    """
+    #### DESCRIPTION:
+    Page to registers a new user
+    """
 
     if (request.method == 'POST'):
+        data: dict = request.get_json()
 
-        first_name : str = request.form.get("first_name", "")
-        last_name  : str = request.form.get("last_name" , "")
-        username   : str = request.form.get("username"  , "")
-        email      : str = request.form.get("email"     , "")
-        password   : str = request.form.get("password"  , "")
+        first_name : str = data.get("first_name", "")
+        last_name  : str = data.get("last_name" , "")
+        username   : str = data.get("username"  , "")
+        email      : str = data.get("email"     , "")
+        password   : str = data.get("password"  , "")
 
         user: User | tuple = User.register(
             username = username,
@@ -71,9 +95,21 @@ def register():
             password = password
         )
 
+        status  : bool = True
+        message : str  = "Account successfully registered"
+
         if isinstance(user, User):
-            return redirect(url_for("auth.login"))
+            login_user(user)
+        else:
+            status  = False
+            if (user[1] == "User already exists"):
+                message = "Utente già esistente"
+            else:
+                message = "Unknown error"
+            # #endif
         # #endif
+
+        return jsonify({"status": status, "message": message}), 200
     else:
         page: AuthPage = AuthPage(
             page_title = "",
